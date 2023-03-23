@@ -20,4 +20,24 @@ class InterfazUltrasonico():
         self.ultrasonicoInstancia.add(info)
         self.ultrasonicoInstancia.enviarDiccionarioYAlmacenamientoJson("ultrasonico.json", info)
 
-    
+    def leer_datos_guardados(self):
+        data = self.ultrasonicoInstancia.cargar_lista_json("ultrasonico.json")
+        print(data)
+
+    def menuInterfazUltrasonico(self):
+        opcion = 0
+        while opcion!= 9:
+            print("---------------------------------------------------------------")
+            print("[1] Ingresar Ultrasonico\n[2] Ver Datos\n[6] Mongo\n[9] Salida")
+            print("---------------------------------------------------------------")
+            try:
+                opcion = int(input("Opcion: "))
+            except ValueError:
+                print("Opcion no valida")
+            print("---------------------------------------------------------------")
+            if opcion == 1:
+                self.crearSensor()
+                opcion = 0
+            elif opcion == 2:
+                self.leer_datos_guardados()
+
