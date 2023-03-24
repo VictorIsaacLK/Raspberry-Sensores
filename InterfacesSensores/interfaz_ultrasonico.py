@@ -78,13 +78,16 @@ class InterfazUltrasonico():
 
                 if respuesta == False:
                     jsontemporal = self.ultrasonicoInstancia.cargar_lista_json("temporal_ultrasonico.json")
-                    nuevojsonjeje = self.ultrasonicoInstancia.cargar_lista_json_temporal(jsontemporal)
-                    se_guardo = self.mongoInstancia.guardarDatosEnMongo('Sensores', 'DatosSensores', nuevojsonjeje, 'ultrasonico,.json', 'clientesTemporales.json')
-                    if se_guardo == False:
-                        print("Pu;etas")
+                    if jsontemporal == False:
+                        print("Hubo un error we, piensale")
                     else:
-                        print("Se han guardado los datos de manera adecuada en ambos sistemas")
-                    self.mongoInstancia.borrar_json("temporal_ultrasonico.json")
+                        nuevojsonjeje = self.ultrasonicoInstancia.cargar_lista_json_temporal(jsontemporal)
+                        se_guardo = self.mongoInstancia.guardarDatosEnMongo('Sensores', 'DatosSensores', nuevojsonjeje, 'ultrasonico,.json', 'clientesTemporales.json')
+                        if se_guardo == False:
+                            print("Pu;etas")
+                        else:
+                            print("Se han guardado los datos de manera adecuada en ambos sistemas")
+                        self.mongoInstancia.borrar_json("temporal_ultrasonico.json")
             elif opcion == 3:
                 self.mongoInstancia.cerrarConexion()
 

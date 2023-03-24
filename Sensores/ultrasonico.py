@@ -58,24 +58,28 @@ class Ultrasonico(lista.Lista):
         return diccionario
     
     def cargar_lista_json_temporal(self, lista):
-        listanueva = []
-        for i in lista:
-            clave = i["clave"]
-            tipo = i["tipo"]
-            descripcion = i["descripcion"]
-            trigger_pin = i["trigger_pin"]
-            echo_pin = i["echo_pin"]
-            valor = i["valor"]
-            fecha = i["fecha"]
-            listanueva.append({
-                "clave":clave,
-                "tipo":tipo,
-                "descripcion":descripcion,
-                "trigger_pin":trigger_pin,
-                "echo_pin":echo_pin,
-                "valor":valor,
-                "fecha":fecha
-                })
-        super().enviarDiccionarioYAlmacenamientoJson("ultrasonico.json", listanueva)
-        return listanueva
+        try:
+            listanueva = []
+            for i in lista:
+                clave = i["clave"]
+                tipo = i["tipo"]
+                descripcion = i["descripcion"]
+                trigger_pin = i["trigger_pin"]
+                echo_pin = i["echo_pin"]
+                valor = i["valor"]
+                fecha = i["fecha"]
+                listanueva.append({
+                    "clave":clave,
+                    "tipo":tipo,
+                    "descripcion":descripcion,
+                    "trigger_pin":trigger_pin,
+                    "echo_pin":echo_pin,
+                    "valor":valor,
+                    "fecha":fecha
+                    })
+            super().enviarDiccionarioYAlmacenamientoJson("ultrasonico.json", listanueva)
+            return listanueva
+        except:
+            return False
+    
 
