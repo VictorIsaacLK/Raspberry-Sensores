@@ -18,6 +18,9 @@ class Ultrasonico(lista.Lista):
         self.identificador = identifier.Identificador()
         super().__init__()
 
+    def limpiar_pin(self):
+        GPIO.cleanup()
+
     def leer_distancia(self):
         GPIO.output(self.trigger_pin, True)
         time.sleep(0.00001)

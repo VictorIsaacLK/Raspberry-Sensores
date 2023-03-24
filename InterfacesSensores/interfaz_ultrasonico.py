@@ -8,6 +8,7 @@ class InterfazUltrasonico():
         #cargar los documentos guardados
 
     def crearSensor(self):
+        self.ultrasonicoInstancia.limpiar_pin()
         trigger_pin = int(input("Ingresa donde esta conectado el trigger pin: "))
         echo_pin = int(input("Ingresa donde esta conectado el echo pin: "))
         self.ultrasonicoInstancia = ultrasonico.Ultrasonico(trigger_pin, echo_pin)
