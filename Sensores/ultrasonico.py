@@ -6,7 +6,7 @@ import datetime
 from Identificador import identificador as identifier
 
 class Ultrasonico(lista.Lista):
-    def __init__(self, trigger_pin = None, echo_pin = None):
+    def __init__(self, trigger_pin, echo_pin):
         self.trigger_pin = trigger_pin
         self.echo_pin = echo_pin
         #GPIO Mode (BOARD / BCM)
