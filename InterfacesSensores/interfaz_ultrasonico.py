@@ -1,9 +1,9 @@
 from Sensores import ultrasonico
-from Mongo import mongo
+import interfaz_mongo
 import sys
 
 class InterfazUltrasonico():
-    def __init__(self, ultrasonicoInstancia = ultrasonico.Ultrasonico(), mongoInstancia = mongo.MongoDB()):
+    def __init__(self, ultrasonicoInstancia = ultrasonico.Ultrasonico(), mongoInstancia = interfaz_mongo.InterafazMongoDB()):
         self.ultrasonicoInstancia = ultrasonicoInstancia
         self.mongoInstancia = mongoInstancia
         #cargar los documentos guardados
@@ -21,8 +21,13 @@ class InterfazUltrasonico():
         self.ultrasonicoInstancia.enviarDiccionarioYAlmacenamientoJson("ultrasonico.json", info)
 
     def leer_datos_guardados(self):
-        data = self.ultrasonicoInstancia.cargar_lista_json("ultrasonico.json")
-        print(data)
+        self.ultrasonicoInstancia.cargar_lista_json("ultrasonico.json")
+
+    def returnar_diccionario(self):
+        try:
+            return self.ultrasonicoInstancia.leer_json()
+        except:
+            print("No se ha podido leer/NO EXISTEN los datos guardados")
 
     def menuInterfazUltrasonico(self):
         opcion = 0
@@ -39,5 +44,37 @@ class InterfazUltrasonico():
                 self.crearSensor()
                 opcion = 0
             elif opcion == 2:
-                self.leer_datos_guardados()
+                self.leer_datos_guardados() #metodo que puede tiene que inicializarse
+            elif opcion == 9:
+                self.mongoInstanciaTemporal()
+                opcion = 0
+    
+    def mongoInstanciaTemporal(self):
+        opcion = 0
+        while opcion!= 9:
+            self.mongoInstancia.MongoInterfaz()
+            try:
+                opcion = int(input("Opcion: "))
+            except ValueError:
+                print("Opcion no valida")
+            if opcion == 1:
+                url_conexion = input("Ingresa la url de conexion a mongoDB: ")
+                self.mongoInstancia.conexion(url_conexion)
+                opcion = 0
+            elif opcion == 2:
+                respuesta = self.mongoInstancia.guardarDatosEnMongo("ultrasonico.json", "temporal_ultrasonico.json", "Sensores", "DatoSensores", self.returnar_diccionario)
+
+                if respuesta == False:
+                    jsontemporal = self.ultrasonicoInstancia.cargar_lista_json("temporal_ultrasonico.json")
+                    nuevojsonjeje = self.ultrasonicoInstancia.cargar_lista_json_temporal(jsontemporal)
+                    se_guardo = self.mongoInstancia.guardarDatosEnMongo('Sensores', 'DatosSensores', nuevojsonjeje, 'ultrasonico,.json', 'clientesTemporales.json')
+                    if se_guardo == False:
+                        print("Pu;etas")
+                    else:
+                        print("Se han guardado los datos de manera adecuada en ambos sistemas")
+                    self.mongoInstancia.borrar_json("temporal_ultrasonico.json")
+            elif opcion == 3:
+                self.mongoInstancia.cerrarConexion()
+
+                
 
