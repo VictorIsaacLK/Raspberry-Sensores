@@ -12,6 +12,7 @@ class Ultrasonico(lista.Lista):
         #GPIO Mode (BOARD / BCM)
         GPIO.setmode(GPIO.BCM)
         #set GPIO Pins
+        GPIO.setwarnings(False)
         GPIO.setup(self.trigger_pin, GPIO.OUT)
         GPIO.setup(self.echo_pin, GPIO.IN)
         #Instancia del identificador
