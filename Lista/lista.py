@@ -3,6 +3,7 @@ from Json import json_conversion
 class Lista(json_conversion.JsonConversion):
     def __init__(self):
         self.lista = []
+        super().__init__()
     
 
     def add(self, item):

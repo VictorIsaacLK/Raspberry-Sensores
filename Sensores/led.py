@@ -6,6 +6,7 @@ class MyLed(lista.Lista):
     def __init__(self, pin):
         self.pin = pin
         self.led = LED(self.pin)
+        super().__init__()
 
     def toggle(self):
         if self.led.is_lit:

@@ -6,6 +6,7 @@ class Temperatura(lista.Lista):
         self.sensor = Adafruit_DHT.DHT11
         self.humedad = humedad
         self.temperatura = temperatura
+        super().__init__()
 
     def leer_temperatura(self, pin):
         humedad, temperatura = Adafruit_DHT.read_retry(self.sensor, pin)

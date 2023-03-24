@@ -16,6 +16,7 @@ class Ultrasonico(lista.Lista):
         GPIO.setup(self.echo_pin, GPIO.IN)
         #Instancia del identificador
         self.identificador = identifier.Identificador()
+        super().__init__()
 
     def leer_distancia(self):
         GPIO.output(self.trigger_pin, True)
