@@ -1,5 +1,5 @@
 from Sensores import ultrasonico
-import interfaz_mongo
+from Mongo import interfaz_mongo
 import sys
 
 class InterfazUltrasonico():
