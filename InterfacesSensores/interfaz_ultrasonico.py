@@ -8,7 +8,6 @@ class InterfazUltrasonico():
         #cargar los documentos guardados
 
     def crearSensor(self):
-        self.ultrasonicoInstancia.limpiar_pin()
         trigger_pin = int(input("Ingresa donde esta conectado el trigger pin: "))
         echo_pin = int(input("Ingresa donde esta conectado el echo pin: "))
         self.ultrasonicoInstancia = ultrasonico.Ultrasonico(trigger_pin, echo_pin)
@@ -23,6 +22,9 @@ class InterfazUltrasonico():
 
     def leer_datos_guardados(self):
         self.ultrasonicoInstancia.cargar_lista_json("ultrasonico.json")
+    
+    def limpiar_pin(self):
+        self.ultrasonicoInstancia.limpiar_pin()
 
     def returnar_diccionario(self):
         try:
@@ -34,7 +36,7 @@ class InterfazUltrasonico():
         opcion = 0
         while opcion!= 9:
             print("---------------------------------------------------------------")
-            print("[1] Ingresar Ultrasonico\n[2] Ver Datos\n[6] Mongo\n[9] Salida")
+            print("[1] Ingresar Ultrasonico\n[2] Ver Datos\n[3]Limpiar pin\n[6] Mongo\n[9] Salida")
             print("---------------------------------------------------------------")
             try:
                 opcion = int(input("Opcion: "))
@@ -46,6 +48,8 @@ class InterfazUltrasonico():
                 opcion = 0
             elif opcion == 2:
                 self.leer_datos_guardados() #metodo que puede tiene que inicializarse
+            elif opcion == 3:
+                self.limpiar_pin()
             elif opcion == 9:
                 self.mongoInstanciaTemporal()
                 opcion = 0
