@@ -2,7 +2,7 @@ import Adafruit_DHT
 from Lista import lista
 
 class Temperatura(lista.Lista):
-    def __init__(self, humedad, temperatura):
+    def __init__(self, humedad = None, temperatura = None):
         self.sensor = Adafruit_DHT.DHT11
         self.humedad = humedad
         self.temperatura = temperatura
