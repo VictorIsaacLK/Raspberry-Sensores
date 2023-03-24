@@ -16,3 +16,6 @@ def menu():
         if opcion == 1:
             interfaz_ultrasonico_instancia.menuInterfazUltrasonico()
             opcion = 0
+
+
+menu()
