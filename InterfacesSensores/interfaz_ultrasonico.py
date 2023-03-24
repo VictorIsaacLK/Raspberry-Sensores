@@ -21,7 +21,8 @@ class InterfazUltrasonico():
         self.ultrasonicoInstancia.enviarDiccionarioYAlmacenamientoJson("ultrasonico.json", info)
 
     def leer_datos_guardados(self):
-        self.ultrasonicoInstancia.cargar_lista_json("ultrasonico.json")
+        datos = self.ultrasonicoInstancia.cargar_lista_json("ultrasonico.json")
+        print(datos)
     
     def limpiar_pin(self):
         try:
@@ -53,6 +54,9 @@ class InterfazUltrasonico():
                 self.leer_datos_guardados() #metodo que puede tiene que inicializarse
             elif opcion == 3:
                 self.limpiar_pin()
+            elif opcion == 6:
+                self.mongoInstanciaTemporal()
+                opcion = 0
             elif opcion == 9:
                 self.mongoInstanciaTemporal()
                 opcion = 0
