@@ -3,15 +3,15 @@ from Mongo import interfaz_mongo
 import sys
 
 class InterfazUltrasonico():
-    def __init__(self, ultrasonicoInstancia = ultrasonico.Ultrasonico(), mongoInstancia = interfaz_mongo.InterafazMongoDB()):
-        self.ultrasonicoInstancia = ultrasonicoInstancia
+    def __init__(self, mongoInstancia = interfaz_mongo.InterafazMongoDB()):
         self.mongoInstancia = mongoInstancia
         #cargar los documentos guardados
 
     def crearSensor(self):
         trigger_pin = int(input("Ingresa donde esta conectado el trigger pin: "))
         echo_pin = int(input("Ingresa donde esta conectado el echo pin: "))
-        ultrasonico.Ultrasonico(trigger_pin, echo_pin)
+        self.ultrasonicoInstancia = ultrasonico.Ultrasonico(trigger_pin, echo_pin)
+        # ultrasonico.Ultrasonico(trigger_pin, echo_pin)
         self.guardar_datos()
         # return ultra
     
