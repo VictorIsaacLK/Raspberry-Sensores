@@ -7,12 +7,10 @@ class InterafazMongoDB():
     
 
     def MongoInterfaz(self):
-        opcion = 0
-        while opcion!= 9:
-            print("---------------------------------------------------------------")
-            print("----------------------- MONGO INTERFAZ ------------------------")
-            print("[1] Conectar a Mongo\n[2] Guardar lista\n[3] Cerrar conexion\n[9] Salida")
-            print("---------------------------------------------------------------")
+        print("---------------------------------------------------------------")
+        print("----------------------- MONGO INTERFAZ ------------------------")
+        print("[1] Conectar a Mongo\n[2] Guardar lista\n[3] Cerrar conexion\n[9] Salida")
+        print("---------------------------------------------------------------")
 
     def conexion(self, url_coneccion):
             conn = self.mongoInstancia.connect(url_coneccion)
