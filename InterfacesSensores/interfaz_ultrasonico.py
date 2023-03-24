@@ -24,7 +24,10 @@ class InterfazUltrasonico():
         self.ultrasonicoInstancia.cargar_lista_json("ultrasonico.json")
     
     def limpiar_pin(self):
-        self.ultrasonicoInstancia.limpiar_pin()
+        try:
+            self.ultrasonicoInstancia.limpiar_pin()
+        except:
+            print("No existe actualmente")
 
     def returnar_diccionario(self):
         try:
