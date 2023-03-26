@@ -7,7 +7,7 @@ def menu():
     while opcion!= 9:
         print("---------------------------------------------------------------")
         print("Bienvenido al sistema, decida la opcion que necesite")
-        print("[1]Ingresar Sensores\n[9] Salida")
+        print("[1] Entrar en el sistema\n[9] Salida")
         print("---------------------------------------------------------------")
         try:
             opcion = int(input("Opcion: "))

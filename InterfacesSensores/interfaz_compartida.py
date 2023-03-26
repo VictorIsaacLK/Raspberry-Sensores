@@ -3,6 +3,7 @@ from Mongo import interfaz_mongo
 import time
 from Identificador import identificador as identifier
 import sys
+import select
 
 class InterfazCompartida():
     def __init__(self, mongoInstancia = interfaz_mongo.InterafazMongoDB()):
@@ -21,14 +22,13 @@ class InterfazCompartida():
         trigger_pin = int(input("Ingresa donde esta conectado el trigger pin: "))
         echo_pin = int(input("Ingresa donde esta conectado el echo pin: "))
         self.ultrasonicoInstancia = ultrasonico.Ultrasonico(trigger_pin, echo_pin)
-        #self.guardar_datos_primera_vez()
 
     def leer_y_guardar_datos(self):
         opcion = 0
         clave = self.identificador.crear_identificador()
         while opcion!= 9:
 
-            self.detente(5)
+            self.detente(3)
             #Seccion sensor ultrasonico
 
             info = self.ultrasonicoInstancia.diccionario(clave)
@@ -36,9 +36,11 @@ class InterfazCompartida():
             listaUltrasonica = self.ultrasonicoInstancia.return_list()
             self.ultrasonicoInstancia.enviarDiccionarioYAlmacenamientoJson("ultrasonico.json", listaUltrasonica)
             print(info)
-            key = sys.stdin.read(1)
-            if key == '9':
-                break
+            ready, _, _ = select.select([sys.stdin], [], [], 1.0)
+            if ready:
+                key = sys.stdin.read(1)
+                if key == '9':
+                    break
 
         return self.menu_lectura()
 
