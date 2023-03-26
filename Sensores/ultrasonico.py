@@ -53,7 +53,7 @@ class Ultrasonico(lista.Lista):
             "trigger_pin":self.trigger_pin,
             "echo_pin":self.echo_pin,
             "valor":distancia,
-            "fecha":datetime.datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')
+            "fecha":datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         }
         return diccionario
     

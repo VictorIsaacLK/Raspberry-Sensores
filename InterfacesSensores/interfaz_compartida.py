@@ -23,7 +23,8 @@ class InterfazCompartida():
     def leer_y_guardar_datos(self):
         opcion = 0
         while opcion!= 9:
-            
+
+            self.detente(5)
             #Seccion sensor ultrasonico
             info = self.ultrasonicoInstancia.diccionario()
             self.ultrasonicoInstancia.add(info)
@@ -70,6 +71,7 @@ class InterfazCompartida():
             if opcion == 1:
                 self.crear_sensores()
                 opcion = 0
+                self.menu_lectura()
 
     def menu_lectura(self):
         opcion = 0
