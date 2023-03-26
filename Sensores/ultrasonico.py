@@ -50,7 +50,9 @@ class Ultrasonico(lista.Lista):
             "descripcion":"Sensor que mide la distancia",
             "trigger_pin":self.trigger_pin,
             "echo_pin":self.echo_pin,
-            "valor":"Distancia: {} cm".format(distancia),
+            "valor":distancia,
+            "tipo_dato":"cm",
+            "Distancia":"{} cm".format(distancia),
             "fecha":datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         }
         return diccionario
