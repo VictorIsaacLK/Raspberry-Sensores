@@ -102,6 +102,8 @@ class InterfazCompartida():
                 self.detente(2)
                 self.leer_y_guardar_datos()
                 opcion = 0
+            elif opcion == 2:
+                self.leer_datos_guardados()
 
     def menu_interfaz_sensores(self):
         opcion = 0
