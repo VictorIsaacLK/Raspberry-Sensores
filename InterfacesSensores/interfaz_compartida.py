@@ -22,6 +22,7 @@ class InterfazCompartida():
         trigger_pin = int(input("Ingresa donde esta conectado el trigger pin: "))
         echo_pin = int(input("Ingresa donde esta conectado el echo pin: "))
         self.ultrasonicoInstancia = ultrasonico.Ultrasonico(trigger_pin, echo_pin)
+        self.ultrasonicoInstancia.cargar_lista_guardada_previamente()
 
     def leer_y_guardar_datos(self):
         opcion = 0

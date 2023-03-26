@@ -57,6 +57,25 @@ class Ultrasonico(lista.Lista):
         }
         return diccionario
     
+    def cargar_lista_guardada_previamente(self):
+        if super().cargar_lista_json("ultrasonico.json") == False:
+            return False
+        else:
+            nuevaLista = super().cargar_lista_json("ultrasonico.json")
+            for objetoIndividual in nuevaLista:
+                diccionario  = {   
+                    "clave" : objetoIndividual["clave"],
+                    "tipo" : objetoIndividual["tipo"],
+                    "descripcion" : objetoIndividual["descripcion"],
+                    "trigger_pin" : objetoIndividual["trigger_pin"],
+                    "echo_pin" : objetoIndividual["echo_pin"],
+                    "valor" : objetoIndividual["valor"],
+                    "tipo_dato" : objetoIndividual["tipo_dato"],
+                    "Distancia" : objetoIndividual["Distancia"],
+                    "fecha" : objetoIndividual["fecha"],
+                }
+                self.add(diccionario)
+    
     def cargar_lista_json_temporal(self, lista):
         try:
             listanueva = []
