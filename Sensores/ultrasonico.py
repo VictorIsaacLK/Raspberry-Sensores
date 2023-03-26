@@ -3,7 +3,6 @@ import RPi.GPIO as GPIO
 import time
 from Lista import lista
 import datetime
-from Identificador import identificador as identifier
 
 class Ultrasonico(lista.Lista):
     def __init__(self, trigger_pin, echo_pin):
@@ -15,8 +14,7 @@ class Ultrasonico(lista.Lista):
         GPIO.setwarnings(False)
         GPIO.setup(self.trigger_pin, GPIO.OUT)
         GPIO.setup(self.echo_pin, GPIO.IN)
-        #Instancia del identificador
-        self.identificador = identifier.Identificador()
+        #Instancia
         super().__init__()
 
     def limpiar_pin(self):
@@ -44,15 +42,15 @@ class Ultrasonico(lista.Lista):
         distance = (TimeElapsed * 34300) / 2
         return distance
     
-    def diccionario(self):
+    def diccionario(self, clave):
         distancia = self.leer_distancia()
         diccionario = {
-            "clave":self.identificador.crear_identificador(),
+            "clave": clave,
             "tipo":"Sensor de Distancia DHT11",
             "descripcion":"Sensor que mide la distancia",
             "trigger_pin":self.trigger_pin,
             "echo_pin":self.echo_pin,
-            "valor":distancia,
+            "valor":"Distancia: {} cm".format(distancia),
             "fecha":datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         }
         return diccionario

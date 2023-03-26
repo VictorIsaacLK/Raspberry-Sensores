@@ -1,10 +1,12 @@
 from Sensores import ultrasonico
 from Mongo import interfaz_mongo
 import time
+from Identificador import identificador as identifier
 
 class InterfazCompartida():
     def __init__(self, mongoInstancia = interfaz_mongo.InterafazMongoDB()):
         self.mongoInstancia = mongoInstancia
+        self.identificador = identifier.Identificador()
         #cargar los documentos guardados
 
 
@@ -22,15 +24,17 @@ class InterfazCompartida():
 
     def leer_y_guardar_datos(self):
         opcion = 0
+        clave = self.identificador.crear_identificador()
         while opcion!= 9:
 
             self.detente(5)
             #Seccion sensor ultrasonico
-            info = self.ultrasonicoInstancia.diccionario()
+
+            info = self.ultrasonicoInstancia.diccionario(clave)
             self.ultrasonicoInstancia.add(info)
             listaUltrasonica = self.ultrasonicoInstancia.return_list()
             self.ultrasonicoInstancia.enviarDiccionarioYAlmacenamientoJson("ultrasonico.json", listaUltrasonica)
-            
+
         self.menu_lectura()
 
     def leer_datos_guardados(self):
