@@ -30,6 +30,8 @@ class InterfazCompartida():
             self.ultrasonicoInstancia.add(info)
             listaUltrasonica = self.ultrasonicoInstancia.return_list()
             self.ultrasonicoInstancia.enviarDiccionarioYAlmacenamientoJson("ultrasonico.json", listaUltrasonica)
+            
+        self.menu_lectura()
 
     def leer_datos_guardados(self):
         
