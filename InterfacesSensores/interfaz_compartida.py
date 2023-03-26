@@ -24,8 +24,9 @@ class InterfazCompartida():
         #self.guardar_datos_primera_vez()
 
     def leer_y_guardar_datos(self):
+        opcion = 0
         clave = self.identificador.crear_identificador()
-        while True:
+        while opcion!= 9:
 
             self.detente(5)
             #Seccion sensor ultrasonico
@@ -36,7 +37,7 @@ class InterfazCompartida():
             self.ultrasonicoInstancia.enviarDiccionarioYAlmacenamientoJson("ultrasonico.json", listaUltrasonica)
             print(info)
             key = sys.stdin.read(1)
-            if key == 'o':
+            if key == '9':
                 break
 
         return self.menu_lectura()
