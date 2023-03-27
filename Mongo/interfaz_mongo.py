@@ -9,7 +9,7 @@ class InterafazMongoDB():
     def MongoInterfaz(self):
         print("---------------------------------------------------------------")
         print("----------------------- MONGO INTERFAZ ------------------------")
-        print("[1] Conectar a Mongo\n[2] Guardar lista\n[3] Cerrar conexion\n[9] Salida")
+        print("[1] Conectar a Mongo\n[2] Guardar datos\n[3] Cerrar conexion\n[9] Salida")
         print("---------------------------------------------------------------")
 
     def conexion(self, url_coneccion):
@@ -36,7 +36,9 @@ class InterafazMongoDB():
                 se_guardo = self.mongoInstancia.guardar_en_mongo(db_nombre, collection_nombre, diccionario, nombre_json, nombre_json_temporal)
                 if se_guardo == False:
                     print("No existe conexion con la base de datos, se han guardado los datos de manera temporal")
-                    # De aqui en adelante si exite la conexion, al menos en este if, es cuando no existe ar temporal, pero si conexion            
+                    # return False // este lo puse despues yo, pero veo que no lo necesito porque es en el except donde necesito el false, aqui nada mas me esta avisando que seguardo de manera temporal
+                    
+                    # De aqui en adelante si exite la conexion, al menos en este if, es cuando no existe archivo temporal, pero si conexion            
                 else:
                     print("Se han guardado los datos de manera adecuada en ambos sistemas")
         except:

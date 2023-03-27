@@ -54,6 +54,7 @@ class InterfazCompartida():
             print(datos)
     
 
+    #creo que tampoco ha sido usado
     def limpiar_pin(self):
         try:
             self.ultrasonicoInstancia.limpiar_pin()
@@ -61,8 +62,9 @@ class InterfazCompartida():
             print("No existe actualmente")
             return False
 
-    def returnar_diccionario(self):
-        informacion =  self.ultrasonicoInstancia.leer_json("ultrasonico.json")
+    def returnar_diccionario_ultrasonico(self):
+        #informacion =  self.ultrasonicoInstancia.leer_json("ultrasonico.json")
+        informacion = self.ultrasonicoInstancia.return_list() #prueba a ver si se puede con la lista
         if informacion == False:
             print("No existen datos actualmente")
             return False
@@ -89,7 +91,7 @@ class InterfazCompartida():
         opcion = 0
         while opcion!= 9:
             print("---------------------------------------------------------------")
-            print("[1] Activar los sensores\n[2] Ver informacion\n[9] Salida")
+            print("[1] Activar los sensores\n[2] Ver informacion\n[3] Mongo\n[9] Salida")
             print("---------------------------------------------------------------")
             try:
                 opcion = int(input("Opcion: "))
@@ -102,11 +104,15 @@ class InterfazCompartida():
                 self.leer_y_guardar_datos()
                 opcion = 0
             elif opcion == 2:
-        
                 self.leer_datos_guardados()
+                opcion = 0
+            elif opcion == 3:
+                self.mongoInstanciaTemporal()
+                opcion = 0
         #Al salir, se limpiaran los pines para que podamos usarlos despues
         self.ultrasonicoInstancia.limpiar_pin()
 
+    #creo que no ha sido usado
     def menu_interfaz_sensores(self):
         opcion = 0
         while opcion != 0:
@@ -114,7 +120,7 @@ class InterfazCompartida():
             print("[1] Ultrasonico\n[2] Humedad y Temperatura\n[3] LED\n[9] Salida")
             print("---------------------------------------------------------------")
 
-
+    #tampoco ha sido usado
     def menu_ultrasonico(self):
         opcion = 0
         while opcion!= 9:
@@ -152,20 +158,24 @@ class InterfazCompartida():
                 self.mongoInstancia.conexion(url_conexion)
                 opcion = 0
             elif opcion == 2:
-                respuesta = self.mongoInstancia.guardarDatosEnMongo("ultrasonico.json", "temporal_ultrasonico.json", "Sensores", "DatoSensores", self.returnar_diccionario)
-
-                if respuesta == False:
-                    jsontemporal = self.ultrasonicoInstancia.cargar_lista_json("temporal_ultrasonico.json")
-                    if jsontemporal == False:
-                        print("Hubo un error we, piensale")
-                    else:
-                        nuevojsonjeje = self.ultrasonicoInstancia.cargar_lista_json_temporal(jsontemporal)
-                        se_guardo = self.mongoInstancia.guardarDatosEnMongo('Sensores', 'DatosSensores', nuevojsonjeje, 'ultrasonico,.json', 'clientesTemporales.json')
-                        if se_guardo == False:
-                            print("Pu;etas")
-                        else:
-                            print("Se han guardado los datos de manera adecuada en ambos sistemas")
-                        self.mongoInstancia.borrar_json("temporal_ultrasonico.json")
+                #Aqui empieza lo bueno
+                self.ultrasonico_mongo()
             elif opcion == 3:
                 self.mongoInstancia.cerrarConexion()
-        
+    
+    def ultrasonico_mongo(self):
+        respuesta = self.mongoInstancia.guardarDatosEnMongo("ultrasonico.json", "temporal_ultrasonico.json", "Sensores", "DatoSensores", self.returnar_diccionario_ultrasonico)
+        if respuesta == False:
+            jsontemporal = self.ultrasonicoInstancia.cargar_lista_json("temporal_ultrasonico.json")
+            
+            #si json temporal no existe, entonces se crea
+            if jsontemporal == False:
+                print("No existe temporal")
+            else:
+                nuevojsonjeje = self.ultrasonicoInstancia.cargar_lista_json_temporal(jsontemporal)
+                se_guardo = self.mongoInstancia.guardarDatosEnMongo('Sensores', 'DatoSensores', nuevojsonjeje, 'ultrasonico.json', 'temporal_ultrasonico.json')
+                if se_guardo == False:
+                    print("Pu;etas")
+                else:
+                    print("Se han guardado los datos de manera adecuada en ambos sistemas")
+                    self.mongoInstancia.borrar_json("temporal_ultrasonico.json")

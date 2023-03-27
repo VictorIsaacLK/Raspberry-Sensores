@@ -86,6 +86,8 @@ class Ultrasonico(lista.Lista):
                 trigger_pin = i["trigger_pin"]
                 echo_pin = i["echo_pin"]
                 valor = i["valor"]
+                tipo_dato = i["tipo_dato"]
+                Distancia = i["Distancia"]
                 fecha = i["fecha"]
                 listanueva.append({
                     "clave":clave,
@@ -94,6 +96,8 @@ class Ultrasonico(lista.Lista):
                     "trigger_pin":trigger_pin,
                     "echo_pin":echo_pin,
                     "valor":valor,
+                    "tipo_dato":tipo_dato,
+                    "Distancia":Distancia,
                     "fecha":fecha
                     })
             super().enviarDiccionarioYAlmacenamientoJson("ultrasonico.json", listanueva)
