@@ -4,6 +4,7 @@ import time
 from Identificador import identificador as identifier
 import sys
 import select
+from Sensores import temperatura
 
 class InterfazCompartida():
     def __init__(self, mongoInstancia = interfaz_mongo.InterafazMongoDB()):
@@ -16,13 +17,21 @@ class InterfazCompartida():
         time.sleep(segundos)
     
     def crear_sensores(self):
+        print("A continuacion, agregaras como estan acomodados los pines de los sensores")
         
         #Seccion sensor ultrasonico
-
+        print("Seccion sensor ultrasonico")
         trigger_pin = int(input("Ingresa donde esta conectado el trigger pin: "))
         echo_pin = int(input("Ingresa donde esta conectado el echo pin: "))
         self.ultrasonicoInstancia = ultrasonico.Ultrasonico(trigger_pin, echo_pin)
         self.ultrasonicoInstancia.cargar_lista_guardada_previamente()
+
+        #Seccion sensor dht11
+        print("Seccion sensor dht11")
+        pin_dht11 = int(input("Ingresa donde esta conectado el pin: "))
+        self.dht11Instancia = temperatura.Temperatura(pin_dht11)
+        self.dht11Instancia.cargar_lista_guardada_previamente()
+
 
     def leer_y_guardar_datos(self):
         opcion = 0
@@ -37,6 +46,14 @@ class InterfazCompartida():
             listaUltrasonica = self.ultrasonicoInstancia.return_list()
             self.ultrasonicoInstancia.enviarDiccionarioYAlmacenamientoJson("ultrasonico.json", listaUltrasonica)
             print(info)
+
+            #Seccion sensor dht11
+            info_dht11 = self.dht11Instancia.diccionario(clave)
+            self.dht11Instancia.add(info_dht11)
+            listaDht11 = self.dht11Instancia.return_list()
+            self.dht11Instancia.enviarDiccionarioYAlmacenamientoJson("dht11.json", listaDht11)
+            print(info_dht11)
+
             ready, _, _ = select.select([sys.stdin], [], [], 1.0)
             if ready:
                 key = sys.stdin.read(1)
@@ -46,12 +63,15 @@ class InterfazCompartida():
     def leer_datos_guardados(self):
         
         #Aqui van a estar todos juntos
-        datos = self.ultrasonicoInstancia.cargar_lista_json("ultrasonico.json")
-        if datos == False:
+        datosUltra = self.ultrasonicoInstancia.cargar_lista_json("ultrasonico.json")
+        datosDht11 = self.dht11Instancia.cargar_lista_json("dht11.json")
+        if datosUltra == datosDht11 == False:
             print("No existen datos actualmente")
             return False
         else:
-            print(datos)
+            print(datosUltra)
+            print("----------------\n\n\n\n\n\n\n----------\n\n\n\n\n--------------------")
+            print(datosDht11)
     
 
     #creo que tampoco ha sido usado
@@ -70,6 +90,16 @@ class InterfazCompartida():
             return False
         else:
             return informacion
+        
+    
+    def returnar_diccionario_dht11(self):
+        informacion = self.dht11Instancia.return_list()
+        if informacion == False:
+            print("No existen datos actualmente")
+            return False
+        else:
+            return informacion
+    
 
     def menu_introductorio(self):
         opcion = 0
@@ -188,7 +218,7 @@ class InterfazCompartida():
 
 
         #Se usa en el metodo que no sirve de mongo, despues lo arreglo
-        
+
         # respuesta = self.mongoInstancia.guardarDatosEnMongo("ultrasonico.json", "temporal_ultrasonico.json", "Sensores", "DatoSensores", self.returnar_diccionario_ultrasonico())
         # if respuesta == False:
         #     jsontemporal = self.ultrasonicoInstancia.cargar_lista_json("temporal_ultrasonico.json")
