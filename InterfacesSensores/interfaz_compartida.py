@@ -29,7 +29,7 @@ class InterfazCompartida():
         clave = self.identificador.crear_identificador()
         while opcion!= 9:
 
-            self.detente(3)
+            self.detente(2)
             #Seccion sensor ultrasonico
 
             info = self.ultrasonicoInstancia.diccionario(clave)
@@ -42,8 +42,6 @@ class InterfazCompartida():
                 key = sys.stdin.read(1)
                 if key == '9':
                     break
-
-        return self.menu_lectura()
 
     def leer_datos_guardados(self):
         
@@ -104,7 +102,10 @@ class InterfazCompartida():
                 self.leer_y_guardar_datos()
                 opcion = 0
             elif opcion == 2:
+        
                 self.leer_datos_guardados()
+        #Al salir, se limpiaran los pines para que podamos usarlos despues
+        self.ultrasonicoInstancia.limpiar_pin()
 
     def menu_interfaz_sensores(self):
         opcion = 0
