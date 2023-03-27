@@ -13,29 +13,7 @@ class MongoDB(lista.Lista):
             print("Conexión exitosa a MongoDB")
             return self.client
         except Exception as e:
-            return False
-        
-           
-    def update_all_documents(self, db_name, coll_name, new_docs):
-        try:
-            db = self.client[db_name]
-            coll = db[coll_name]
-            coll.delete_many({})
-            coll.insert_many(new_docs)
-        except Exception:
-            print("No se pudo establecer una conexión a MongoDB se recomineda restablecer su conexion ")
-            
-    def hacer_find(self):
-        try:
-            db = self.client['Tienda']
-            collection = db['Productos']
-                    
-            result = collection.find()
-            for doc in result:
-                print(doc)
-        except Exception:
-            return False
-        
+            return False      
         
     def guardar_en_mongo(self, db_name, coll_name, lista, nombre_json, nombre_temp_json):
         try:
