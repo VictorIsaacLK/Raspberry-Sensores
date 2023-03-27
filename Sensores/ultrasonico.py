@@ -27,33 +27,29 @@ class Ultrasonico(lista.Lista):
         time.sleep(0.00001)
         StartTime = time.time()
         StopTime = time.time()
-        # save StartTime
+        
+        # Tiempo de inicio
         while GPIO.input(self.echo_pin) == 0:
             StartTime = time.time()
 
-        # save time of arrival
+        # Tiempo de llegada
         while GPIO.input(self.echo_pin) == 1:
             StopTime = time.time()
 
-        # time difference between start and arrival
+        # Tiempo de diferencia entre la ida y llegada
         TimeElapsed = StopTime - StartTime
+        
         # multiply with the sonic speed (34300 cm/s)
         # and divide by 2, because there and back
         distance = (TimeElapsed * 34300) / 2
         return distance
     
-    def diccionario(self, clave):
+    def diccionario(self, sensor):
         distancia = self.leer_distancia()
         diccionario = {
-            "clave": clave,
-            "tipo":"Sensor de Distancia DHT11",
-            "descripcion":"Sensor que mide la distancia",
-            "trigger_pin":self.trigger_pin,
-            "echo_pin":self.echo_pin,
             "valor":distancia,
-            "tipo_dato":"cm",
-            "Distancia":"{} cm".format(distancia),
-            "fecha":datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            "fecha":datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+            "sensor":sensor
         }
         return diccionario
     
@@ -63,16 +59,10 @@ class Ultrasonico(lista.Lista):
         else:
             nuevaLista = super().cargar_lista_json("ultrasonico.json")
             for objetoIndividual in nuevaLista:
-                diccionario  = {   
-                    "clave" : objetoIndividual["clave"],
-                    "tipo" : objetoIndividual["tipo"],
-                    "descripcion" : objetoIndividual["descripcion"],
-                    "trigger_pin" : objetoIndividual["trigger_pin"],
-                    "echo_pin" : objetoIndividual["echo_pin"],
+                diccionario  = {
                     "valor" : objetoIndividual["valor"],
-                    "tipo_dato" : objetoIndividual["tipo_dato"],
-                    "Distancia" : objetoIndividual["Distancia"],
                     "fecha" : objetoIndividual["fecha"],
+                    "sensor": objetoIndividual["sensor"],
                 }
                 self.add(diccionario)
     
@@ -80,25 +70,13 @@ class Ultrasonico(lista.Lista):
         try:
             listanueva = []
             for i in lista:
-                clave = i["clave"]
-                tipo = i["tipo"]
-                descripcion = i["descripcion"]
-                trigger_pin = i["trigger_pin"]
-                echo_pin = i["echo_pin"]
                 valor = i["valor"]
-                tipo_dato = i["tipo_dato"]
-                Distancia = i["Distancia"]
                 fecha = i["fecha"]
+                sensor = i["sensor"]
                 listanueva.append({
-                    "clave":clave,
-                    "tipo":tipo,
-                    "descripcion":descripcion,
-                    "trigger_pin":trigger_pin,
-                    "echo_pin":echo_pin,
                     "valor":valor,
-                    "tipo_dato":tipo_dato,
-                    "Distancia":Distancia,
-                    "fecha":fecha
+                    "fecha":fecha,
+                    "sensor":sensor
                     })
             super().enviarDiccionarioYAlmacenamientoJson("ultrasonico.json", listanueva)
             return listanueva
