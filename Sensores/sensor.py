@@ -1,54 +1,20 @@
-import Adafruit_DHT
 from Lista import lista
 import datetime
 
-class Temperatura(lista.Lista):
-    def __init__(self, pin):
-        self.pin = pin
-        self.sensor = Adafruit_DHT.DHT11
+
+class Sensor(lista.Lista):
+    def __init__(self):
         super().__init__()
-
-    def leer_temperatura(self):
-        humedad, temperatura = Adafruit_DHT.read_retry(self.sensor, self.pin)
-        if humedad is not None and temperatura is not None:
-            return temperatura
-        else:
-            print("Error al leer los datos")
     
-    def leer_humedad(self):
-        humedad, temperatura = Adafruit_DHT.read_retry(self.sensor, self.pin)
-        if humedad is not None and temperatura is not None:
-            return humedad
-        else:
-            print("Error al leer los datos")
 
-
-    def diccionario_temperatura(self, clave, sensor):
-        temperatura = self.leer_temperatura()
+    def diccionario_sensor(self, info_sensor):
         diccionario = {
-            "clave":clave,
-            "valor":temperatura,
-            "fecha":datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
-            "sensor":sensor
+            "clave": info_sensor['clave'],
+            "tipo":info_sensor['tipo'],
+            "descripcion":info_sensor['descripcion'],
+            "dato":info_sensor['dato']
         }
         return diccionario
-    
-    # def diccionario_temperatura(self, clave, ):
-    #     temperatura = self.leer_temperatura()
-    #     diccionario = {
-    #         "clave": clave,
-    #         "tipo":"Sensor DHT11",
-    #         "descripcion":"Sensor que mide la humedad y temperatura",
-    #         "pin":self.pin,
-    #         "valor_humedad":humedad,
-    #         "humedad_dato":"Porcentaje de Humedad",
-    #         "valor_temperatura":temperatura,
-    #         "temperatura_dato":"Grados Celcius",
-    #         "humedad":"{} %".format(humedad),
-    #         "temperatura":"{} °C".format(temperatura),
-    #         "fecha":datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-    #     }
-    #     return diccionario
     
     
     def cargar_lista_guardada_previamente(self):
@@ -104,5 +70,3 @@ class Temperatura(lista.Lista):
             return listanueva
         except:
             return False
-        
-        
