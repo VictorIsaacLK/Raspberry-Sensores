@@ -17,22 +17,12 @@ class MyLed(lista.Lista):
             self.led.on()
             return 1
 
-    def estado(self):
-        if self.led.is_lit:
-            return 1
-        else:
-            return 0
-
-    def diccionario(self, clave):
+    def diccionario(self, sensor):
         estado = self.toggle()
         diccionario = {
-            "clave": clave,
-            "tipo":"LED",
-            "descripcion":"Dispositivo semiconductor que emite luz",
-            "pin":self.pin,
             "valor":estado,
-            "tipo_dato":"booleano",
-            "fecha":datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            "fecha":datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+            "sensor":sensor
         }
         return diccionario
     
@@ -42,14 +32,10 @@ class MyLed(lista.Lista):
         else:
             nuevaLista = super().cargar_lista_json("led.json")
             for objetoIndividual in nuevaLista:
-                diccionario  = {   
-                    "clave" : objetoIndividual["clave"],
-                    "tipo" : objetoIndividual["tipo"],
-                    "descripcion" : objetoIndividual["descripcion"],
-                    "pin" : objetoIndividual["pin"],
+                diccionario  = {
                     "valor" : objetoIndividual["valor"],
-                    "tipo_dato" : objetoIndividual["tipo_dato"],
                     "fecha" : objetoIndividual["fecha"],
+                    "sensor" : objetoIndividual["sensor"]
                 }
                 self.add(diccionario)
     
@@ -57,21 +43,13 @@ class MyLed(lista.Lista):
         try:
             listanueva = []
             for i in lista:
-                clave = i["clave"]
-                tipo = i["tipo"]
-                descripcion = i["descripcion"]
-                pin = i["pin"]
                 valor = i["valor"]
-                tipo_dato = i["tipo_dato"]
                 fecha = i["fecha"]
+                sensor = i["sensor"]
                 listanueva.append({
-                    "clave":clave,
-                    "tipo":tipo,
-                    "descripcion":descripcion,
-                    "pin":pin,
                     "valor":valor,
-                    "tipo_dato":tipo_dato,
-                    "fecha":fecha
+                    "fecha":fecha,
+                    "sensor":sensor
                     })
             super().enviarDiccionarioYAlmacenamientoJson("led.json", listanueva)
             return listanueva
