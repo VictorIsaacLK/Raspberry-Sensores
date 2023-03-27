@@ -37,10 +37,12 @@ class InterafazMongoDB():
                 if se_guardo == False:
                     print("No existe conexion con la base de datos, se han guardado los datos de manera temporal")
                     # return False // este lo puse despues yo, pero veo que no lo necesito porque es en el except donde necesito el false, aqui nada mas me esta avisando que seguardo de manera temporal
-                    
+
                     # De aqui en adelante si exite la conexion, al menos en este if, es cuando no existe archivo temporal, pero si conexion            
                 else:
                     print("Se han guardado los datos de manera adecuada en ambos sistemas")
+            else:
+                self.mongoInstancia.guardar_json(nombre_json_temporal, diccionario)
         except:
             return False
         #dejar esto y luego hacer un try que returne un false o true para poder poner el codigo que sigue en la interfaz de las cosas // se hace esto porque para cargar las cosas del json temporal tengo que usar en el cargar lista de json temporal una forma de crear las cosas y eso lo hice hardcodeado en la practica pasada, ademas que tengo que cargar las cosas en su respectiva lista        
