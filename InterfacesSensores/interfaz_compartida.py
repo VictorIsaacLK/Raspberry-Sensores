@@ -5,6 +5,7 @@ from Identificador import identificador as identifier
 import sys
 import select
 from Sensores import temperatura
+from Sensores import led
 
 class InterfazCompartida():
     def __init__(self, mongoInstancia = interfaz_mongo.InterafazMongoDB()):
@@ -32,6 +33,12 @@ class InterfazCompartida():
         self.dht11Instancia = temperatura.Temperatura(pin_dht11)
         self.dht11Instancia.cargar_lista_guardada_previamente()
 
+        #Secccion LED
+        print("Seccion LED")
+        pin_led = int(input("Ingresa donde esta conectado el pin: "))
+        self.ledInstancia = led.MyLed(pin_led)
+        self.ledInstancia.cargar_lista_guardada_previamente()
+
 
     def leer_y_guardar_datos(self):
         opcion = 0
@@ -54,6 +61,13 @@ class InterfazCompartida():
             self.dht11Instancia.enviarDiccionarioYAlmacenamientoJson("dht11.json", listaDht11)
             print(info_dht11)
 
+            #Seccion LED
+            info_led = self.ledInstancia.diccionario(clave)
+            self.ledInstancia.add(info_led)
+            listaLed = self.ledInstancia.return_list()
+            self.ledInstancia.enviarDiccionarioYAlmacenamientoJson("led.json", listaLed)
+            print(info_led)
+
             ready, _, _ = select.select([sys.stdin], [], [], 1.0)
             if ready:
                 key = sys.stdin.read(1)
@@ -65,13 +79,18 @@ class InterfazCompartida():
         #Aqui van a estar todos juntos
         datosUltra = self.ultrasonicoInstancia.cargar_lista_json("ultrasonico.json")
         datosDht11 = self.dht11Instancia.cargar_lista_json("dht11.json")
-        if datosUltra == datosDht11 == False:
+        datosLed = self.ledInstancia.cargar_lista_json("led.json")
+        if datosUltra == datosDht11 == datosLed == False:
             print("No existen datos actualmente")
             return False
         else:
             print(datosUltra)
             print("----------------\n\n\n\n\n\n\n----------\n\n\n\n\n--------------------")
             print(datosDht11)
+            print("----------------\n\n\n\n\n\n\n----------\n\n\n\n\n--------------------")
+            print(datosLed)
+
+            
     
 
     #creo que tampoco ha sido usado
@@ -94,6 +113,14 @@ class InterfazCompartida():
     
     def returnar_diccionario_dht11(self):
         informacion = self.dht11Instancia.return_list()
+        if informacion == False:
+            print("No existen datos actualmente")
+            return False
+        else:
+            return informacion
+        
+    def returnar_diccionario_led(self):
+        informacion = self.ledInstancia.return_list()
         if informacion == False:
             print("No existen datos actualmente")
             return False
@@ -191,6 +218,8 @@ class InterfazCompartida():
                 #Aqui empieza lo bueno
                 self.ultrasonico_mongo()
                 self.dht11_mongo()
+                self.led_mongo()
+                opcion = 0
             elif opcion == 3:
                 self.mongoInstancia.cerrarConexion()
     
@@ -256,3 +285,24 @@ class InterfazCompartida():
             else:
                 print("Se han guardado los datos de manera adecuada en ambos sistemas")
                 self.mongoInstancia.mongoInstancia.borrar_json("temporal_dht11.json")
+    
+    
+    def led_mongo(self):
+        jsontemporal = self.mongoInstancia.mongoInstancia.cargar_lista_json("temporal_led.json")
+        if jsontemporal == False:
+            print("No existe ningun archivo temporal actualmente")
+            se_guardo = self.mongoInstancia.mongoInstancia.guardar_en_mongo('Sensores', 'DatoSensorLED', self.returnar_diccionario_led(), 'led.json', 'temporal_led.json')
+            if se_guardo == False:
+                print("No existe conexion con la base de datos, se han guardado los datos de manera temporal")   
+            else:
+                print("Se han guardado los datos de manera adecuada en ambos sistemas")
+        else:
+            nuevojsonjeje = self.ledInstancia.cargar_lista_json_temporal(jsontemporal)
+            # print(jsonTemporalConvertido)
+            # el jsontemporal tiene que pasar por el convertidor, porque si no me esta jodiendo la json
+            se_guardo = self.mongoInstancia.mongoInstancia.guardar_en_mongo('Sensores', 'DatoSensorLED', nuevojsonjeje, 'led.json', 'temporal_led.json')
+            if se_guardo == False:
+                print("Pu;etas")
+            else:
+                print("Se han guardado los datos de manera adecuada en ambos sistemas")
+                self.mongoInstancia.mongoInstancia.borrar_json("temporal_led.json")
