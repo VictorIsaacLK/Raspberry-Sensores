@@ -46,11 +46,11 @@ class Temperatura(lista.Lista):
                     "descripcion" : objetoIndividual["descripcion"],
                     "pin": objetoIndividual["pin"],
                     "valor_humedad":objetoIndividual["valor_humedad"],
-                    "humedad_dato":"Porcentaje de Humedad",
+                    "humedad_dato":objetoIndividual["humedad_dato"],
                     "valor_temperatura":objetoIndividual["valor_temperatura"],
-                    "temperatura_dato":"Grados Celcius",
-                    "humedad":"{} %".format(objetoIndividual["valor_humedad"]),
-                    "temperatura":"{} °C".format(objetoIndividual["valor_temperatura"]),
+                    "temperatura_dato":objetoIndividual["temperatura_dato"],
+                    "humedad":objetoIndividual["humedad"],
+                    "temperatura":objetoIndividual["temperatura"],
                     "fecha" : objetoIndividual["fecha"],
                 }
                 self.add(diccionario)
@@ -79,8 +79,8 @@ class Temperatura(lista.Lista):
                     "humedad_dato":humedad_dato,
                     "valor_temperatura":valor_temperatura,
                     "temperatura_dato":temperatura_dato,
-                    "humedad":"{}%".format(humedad),
-                    "temperatura":"{0:.1f}°C".format(temperatura),
+                    "humedad":humedad,
+                    "temperatura":temperatura,
                     "fecha":fecha
                     })
             super().enviarDiccionarioYAlmacenamientoJson("dht11.json", listanueva)
