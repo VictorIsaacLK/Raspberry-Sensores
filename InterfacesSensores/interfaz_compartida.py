@@ -170,7 +170,7 @@ class InterfazCompartida():
             
             #si json temporal no existe, entonces se crea
             if jsontemporal == False:
-                print("No existe temporal")
+                print("No existe conexion, se creara un archivo temporal para cuando exista conexion")
             else:
                 nuevojsonjeje = self.ultrasonicoInstancia.cargar_lista_json_temporal(jsontemporal)
                 se_guardo = self.mongoInstancia.guardarDatosEnMongo('Sensores', 'DatoSensores', nuevojsonjeje, 'ultrasonico.json', 'temporal_ultrasonico.json')
