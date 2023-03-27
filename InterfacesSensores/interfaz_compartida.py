@@ -164,7 +164,7 @@ class InterfazCompartida():
                 self.mongoInstancia.cerrarConexion()
     
     def ultrasonico_mongo(self):
-        respuesta = self.mongoInstancia.guardarDatosEnMongo("ultrasonico.json", "temporal_ultrasonico.json", "Sensores", "DatoSensores", self.returnar_diccionario_ultrasonico)
+        respuesta = self.mongoInstancia.guardarDatosEnMongo("ultrasonico.json", "temporal_ultrasonico.json", "Sensores", "DatoSensores", self.returnar_diccionario_ultrasonico())
         if respuesta == False:
             jsontemporal = self.ultrasonicoInstancia.cargar_lista_json("temporal_ultrasonico.json")
             
