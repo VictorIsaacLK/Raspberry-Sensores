@@ -46,7 +46,7 @@ class Ultrasonico(lista.Lista):
         distancia = self.leer_distancia()
         diccionario = {
             "clave": clave,
-            "tipo":"Sensor de Distancia DHT11",
+            "tipo":"Sensor Ultrasonico HC-SR04",
             "descripcion":"Sensor que mide la distancia",
             "trigger_pin":self.trigger_pin,
             "echo_pin":self.echo_pin,

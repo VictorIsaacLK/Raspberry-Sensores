@@ -79,8 +79,8 @@ class Temperatura(lista.Lista):
                     "humedad_dato":humedad_dato,
                     "valor_temperatura":valor_temperatura,
                     "temperatura_dato":temperatura_dato,
-                    "humedad":"{} %".format(humedad),
-                    "temperatura":"{} °C".format(temperatura),
+                    "humedad":"{}%".format(humedad),
+                    "temperatura":"{0:.1f}°C".format(temperatura),
                     "fecha":fecha
                     })
             super().enviarDiccionarioYAlmacenamientoJson("dht11.json", listanueva)
