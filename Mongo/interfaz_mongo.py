@@ -28,6 +28,7 @@ class InterafazMongoDB():
     def mirarMongo(self):
         self.mongoInstancia.hacerFind()
         
+    #No sirvio, pero despues lo arreglo    
     def guardarDatosEnMongo(self, nombre_json, nombre_json_temporal, db_nombre, collection_nombre, diccionario):
         try: 
             jsontemporal = self.mongoInstancia.cargar_lista_json(nombre_json_temporal)
