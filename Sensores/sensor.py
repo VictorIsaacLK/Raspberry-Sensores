@@ -7,34 +7,27 @@ class Sensor(lista.Lista):
         super().__init__()
     
 
-    def diccionario_sensor(self, info_sensor):
+    def diccionario_sensor(self, clave, tipo, descripcion, pines):
         diccionario = {
-            "clave": info_sensor['clave'],
-            "tipo":info_sensor['tipo'],
-            "descripcion":info_sensor['descripcion'],
-            "dato":info_sensor['dato']
+            "clave": clave,
+            "tipo":tipo,
+            "descripcion":descripcion,
+            "pines":pines
         }
         return diccionario
     
     
     def cargar_lista_guardada_previamente(self):
-        if super().cargar_lista_json("dht11.json") == False:
+        if super().cargar_lista_json("sensores.json") == False:
             return False
         else:
-            nuevaLista = super().cargar_lista_json("dht11.json")
+            nuevaLista = super().cargar_lista_json("sensores.json")
             for objetoIndividual in nuevaLista:
                 diccionario  = {   
                     "clave" : objetoIndividual["clave"],
                     "tipo" : objetoIndividual["tipo"],
                     "descripcion" : objetoIndividual["descripcion"],
-                    "pin": objetoIndividual["pin"],
-                    "valor_humedad":objetoIndividual["valor_humedad"],
-                    "humedad_dato":objetoIndividual["humedad_dato"],
-                    "valor_temperatura":objetoIndividual["valor_temperatura"],
-                    "temperatura_dato":objetoIndividual["temperatura_dato"],
-                    "humedad":objetoIndividual["humedad"],
-                    "temperatura":objetoIndividual["temperatura"],
-                    "fecha" : objetoIndividual["fecha"],
+                    "pines": objetoIndividual["pines"]
                 }
                 self.add(diccionario)
     
@@ -45,28 +38,14 @@ class Sensor(lista.Lista):
                 clave = i["clave"]
                 tipo = i["tipo"]
                 descripcion = i["descripcion"]
-                pin = i["pin"]
-                valor_humedad = i["valor_humedad"]
-                humedad_dato = i["humedad_dato"]
-                valor_temperatura = i["valor_temperatura"]
-                temperatura_dato = i["temperatura_dato"]
-                humedad = i["humedad"]
-                temperatura = i["temperatura"]
-                fecha = i["fecha"]
+                pines = i["pines"]
                 listanueva.append({
                     "clave":clave,
                     "tipo":tipo,
                     "descripcion":descripcion,
-                    "pin":pin,
-                    "valor_humedad":valor_humedad,
-                    "humedad_dato":humedad_dato,
-                    "valor_temperatura":valor_temperatura,
-                    "temperatura_dato":temperatura_dato,
-                    "humedad":humedad,
-                    "temperatura":temperatura,
-                    "fecha":fecha
+                    "pin":pines,
                     })
-            super().enviarDiccionarioYAlmacenamientoJson("dht11.json", listanueva)
+            super().enviarDiccionarioYAlmacenamientoJson("sensores.json", listanueva)
             return listanueva
         except:
             return False
