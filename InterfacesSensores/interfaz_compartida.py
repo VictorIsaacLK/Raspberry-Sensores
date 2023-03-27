@@ -190,6 +190,7 @@ class InterfazCompartida():
             elif opcion == 2:
                 #Aqui empieza lo bueno
                 self.ultrasonico_mongo()
+                self.dht11_mongo()
             elif opcion == 3:
                 self.mongoInstancia.cerrarConexion()
     
@@ -197,7 +198,7 @@ class InterfazCompartida():
         jsontemporal = self.mongoInstancia.mongoInstancia.cargar_lista_json("temporal_ultrasonico.json")
         if jsontemporal == False:
             print("No existe ningun archivo temporal actualmente")
-            se_guardo = self.mongoInstancia.mongoInstancia.guardar_en_mongo('Sensores', 'DatoSensores', self.returnar_diccionario_ultrasonico(), 'ultrasonico.json', 'temporal_ultrasonico.json') #se llama gaurdar en mongo en la nueva
+            se_guardo = self.mongoInstancia.mongoInstancia.guardar_en_mongo('Sensores', 'DatoSensorUltrasonico', self.returnar_diccionario_ultrasonico(), 'ultrasonico.json', 'temporal_ultrasonico.json') #se llama gaurdar en mongo en la nueva
             if se_guardo == False:
                 print("No existe conexion con la base de datos, se han guardado los datos de manera temporal")
                 # De aqui en adelante si exite la conexion, al menos en este if, es cuando no existe ar temporal, pero si conexion            
@@ -207,7 +208,7 @@ class InterfazCompartida():
             nuevojsonjeje = self.ultrasonicoInstancia.cargar_lista_json_temporal(jsontemporal)
             # print(jsonTemporalConvertido)
             # el jsontemporal tiene que pasar por el convertidor, porque si no me esta jodiendo la json
-            se_guardo = self.mongoInstancia.mongoInstancia.guardar_en_mongo('Sensores', 'DatoSensores', nuevojsonjeje, 'ultrasonico.json', 'temporal_ultrasonico.json')
+            se_guardo = self.mongoInstancia.mongoInstancia.guardar_en_mongo('Sensores', 'DatoSensorUltrasonico', nuevojsonjeje, 'ultrasonico.json', 'temporal_ultrasonico.json')
             if se_guardo == False:
                 print("Pu;etas")
             else:
@@ -234,3 +235,24 @@ class InterfazCompartida():
         #         else:
         #             print("Se han guardado los datos de manera adecuada en ambos sistemas")
         #             self.mongoInstancia.borrar_json("temporal_ultrasonico.json")
+
+
+    def dht11_mongo(self):
+        jsontemporal = self.mongoInstancia.mongoInstancia.cargar_lista_json("temporal_dht11.json")
+        if jsontemporal == False:
+            print("No existe ningun archivo temporal actualmente")
+            se_guardo = self.mongoInstancia.mongoInstancia.guardar_en_mongo('Sensores', 'DatoSensorDHT11', self.returnar_diccionario_dht11(), 'dht11.json', 'temporal_dht11.json')
+            if se_guardo == False:
+                print("No existe conexion con la base de datos, se han guardado los datos de manera temporal")   
+            else:
+                print("Se han guardado los datos de manera adecuada en ambos sistemas")
+        else:
+            nuevojsonjeje = self.dht11Instancia.cargar_lista_json_temporal(jsontemporal)
+            # print(jsonTemporalConvertido)
+            # el jsontemporal tiene que pasar por el convertidor, porque si no me esta jodiendo la json
+            se_guardo = self.mongoInstancia.mongoInstancia.guardar_en_mongo('Sensores', 'DatoSensorDHT11', nuevojsonjeje, 'dht11.json', 'temporal_dht11.json')
+            if se_guardo == False:
+                print("Pu;etas")
+            else:
+                print("Se han guardado los datos de manera adecuada en ambos sistemas")
+                self.mongoInstancia.mongoInstancia.borrar_json("temporal_dht11.json")
