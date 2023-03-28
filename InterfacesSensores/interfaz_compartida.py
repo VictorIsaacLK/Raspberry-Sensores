@@ -324,50 +324,6 @@ class InterfazCompartida():
             print("No hay objetos registrados")
 
     
-    def mostrar_info_temperatura(self, diccionario):
-        try:
-            diccionarioDHT11 = diccionario
-            clave_max_len = max([len(str(c['clave'])) for c in diccionarioDHT11])
-            tipo_max_len = max([len(c['tipo']) for c in diccionarioDHT11])
-            descripcion_max_len = max([len(c['descripcion']) for c in diccionarioDHT11])
-            pin_max_len = max([len(str(c['pin'])) for c in diccionarioDHT11])
-            humedad_max_len = max([len(str(c['valor_humedad'])) for c in diccionarioDHT11])
-            humedad_dato_max_len = max([len(c['humedad_dato']) for c in diccionarioDHT11])
-            temperatura_max_len = max([len(str(c['valor_temperatura'])) for c in diccionarioDHT11])
-            temperatura_dato_max_len = max([len(c['temperatura_dato']) for c in diccionarioDHT11])
-            fecha_max_len = max([len(c['fecha']) for c in diccionarioDHT11])
-            
-            print('-' * (clave_max_len + tipo_max_len + descripcion_max_len + pin_max_len + humedad_max_len + humedad_dato_max_len + temperatura_max_len + temperatura_dato_max_len + fecha_max_len + 18))
-            print(colored('| {0:^{1}} | {2:^{3}} | {4:^{5}} | {6:^{7}} | {8:^{9}} | {10:^{11}} | {12:^{13}} | {14:^{15}} | {16:^{17}} |'.format('Clave', clave_max_len, 'Tipo', tipo_max_len, 'Descripcion', descripcion_max_len, 'Pin', pin_max_len, 'Humedad', humedad_max_len, 'Humedad Dato', humedad_dato_max_len, 'Temperatura', temperatura_max_len, 'Temperatura Dato', temperatura_dato_max_len, 'Fecha', fecha_max_len), "yellow"))
-            print('-' * (clave_max_len + tipo_max_len + descripcion_max_len + pin_max_len + humedad_max_len + humedad_dato_max_len + temperatura_max_len + temperatura_dato_max_len + fecha_max_len + 18))
-            
-            for cliente in diccionarioDHT11:
-                print('| {0:^{1}} | {2:^{3}} | {4:^{5}} | {6:^{7}} | {8:^{9}} | {10:^{11}} | {12:^{13}} | {14:^{15}} | {16:^{17}} |'.format(str(cliente['clave']), clave_max_len, cliente['tipo'], tipo_max_len, cliente['descripcion'], descripcion_max_len, str(cliente['pin']), pin_max_len, str(cliente['valor_humedad']), humedad_max_len, cliente['humedad_dato'], humedad_dato_max_len, str(cliente['valor_temperatura']), temperatura_max_len, cliente['temperatura_dato'], temperatura_dato_max_len, cliente['fecha'], fecha_max_len))
-                print('-' * (clave_max_len + tipo_max_len + descripcion_max_len + pin_max_len + humedad_max_len + humedad_dato_max_len + temperatura_max_len + temperatura_dato_max_len + fecha_max_len + 18))
-        except:
-            print("No hay informacion registrada")
-
-    def mostrar_info_ultrasonico(self, diccionario):
-        try:
-            diccionarioUltrasonico = diccionario
-            clave_max_len = max([len(obj['clave']) for obj in diccionarioUltrasonico])
-            tipo_max_len = max([len(obj['tipo']) for obj in diccionarioUltrasonico])
-            descripcion_max_len = max([len(obj['descripcion']) for obj in diccionarioUltrasonico])
-            valor_max_len = max([len(str(obj['valor'])) for obj in diccionarioUltrasonico])
-            tipo_dato_max_len = max([len(obj['tipo_dato']) for obj in diccionarioUltrasonico])
-            distancia_max_len = max([len(str(obj['Distancia'])) for obj in diccionarioUltrasonico])
-            fecha_max_len = max([len(obj['fecha']) for obj in diccionarioUltrasonico])
-
-            print('-' * (clave_max_len + tipo_max_len + descripcion_max_len + valor_max_len + tipo_dato_max_len + distancia_max_len + fecha_max_len + 17))
-            print(colored('| {0:^{1}} | {2:^{3}} | {4:^{5}} | {6:^{7}} | {8:^{9}} | {10:^{11}} | {12:^{13}} |'.format('Clave', clave_max_len, 'Tipo', tipo_max_len, 'Descripcion', descripcion_max_len, 'Valor', valor_max_len, 'Tipo de Dato', tipo_dato_max_len, 'Distancia', distancia_max_len, 'Fecha', fecha_max_len), "yellow"))
-            print('-' * (clave_max_len + tipo_max_len + descripcion_max_len + valor_max_len + tipo_dato_max_len + distancia_max_len + fecha_max_len + 17))
-
-            for objeto in diccionarioUltrasonico:
-                print('| {0:^{1}} | {2:^{3}} | {4:^{5}} | {6:^{7}} | {8:^{9}} | {10:^{11}} | {12:^{13}} |'.format(objeto['clave'], clave_max_len, objeto['tipo'], tipo_max_len, objeto['descripcion'], descripcion_max_len, objeto['valor'], valor_max_len, objeto['tipo_dato'], tipo_dato_max_len, objeto['Distancia'], distancia_max_len, objeto['fecha'], fecha_max_len))
-                print('-' * (clave_max_len + tipo_max_len + descripcion_max_len + valor_max_len + tipo_dato_max_len + distancia_max_len + fecha_max_len + 17))
-        except:
-            print("No hay objetos registrados")
-
     def mostrar_info_led(self, objetos):
         try:
             clave_max_len = max([len(obj['clave']) for obj in objetos])
