@@ -152,6 +152,7 @@ class InterfazCompartida():
 
     def menu_lectura(self):
         opcion = 0
+        sensor_info_ultra, sensor_info_dht11, info_led = self.crear_sensores()
         while opcion!= 9:
             print("---------------------------------------------------------------")
             print("[1] Activar los sensores\n[2] Ver informacion\n[3] Mongo\n[9] Salida")
@@ -162,7 +163,6 @@ class InterfazCompartida():
                 print("Opcion no valida")
             print("---------------------------------------------------------------")
             if opcion == 1:
-                sensor_info_ultra, sensor_info_dht11, info_led = self.crear_sensores()
                 self.leer_y_guardar_datos(sensor_info_ultra, sensor_info_dht11, info_led)
                 opcion = 0
             elif opcion == 2:
