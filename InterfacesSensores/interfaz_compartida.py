@@ -36,7 +36,7 @@ class InterfazCompartida():
         pin_dht11 = int(input("Ingresa donde esta conectado el pin: "))
         self.dht11Instancia = temperatura.Temperatura(pin_dht11)
         sensor_info_dht11 = self.sensorIntancia.diccionario_sensor(clave, "Sensor dht11", "Mide la temperatura y distancia", [pin_dht11])
-        self.dht11Instancia.cargar_lista_guardada_previamente("humedad.json", "temperatura.json")
+        self.dht11Instancia.cargar_lista_guardada_previamente(["humedad.json", "temperatura.json"])
 
         #Secccion LED
         print("Seccion LED")
@@ -63,11 +63,17 @@ class InterfazCompartida():
             print(info)
 
             #Seccion sensor dht11
-            info_dht11 = self.dht11Instancia.diccionario(sensor_info_dht11)
-            self.dht11Instancia.add(info_dht11)
-            listaDht11 = self.dht11Instancia.return_list()
-            self.dht11Instancia.enviarDiccionarioYAlmacenamientoJson("dht11.json", listaDht11)
-            print(info_dht11)
+            info_tem = self.dht11Instancia.diccionario_temperatura(sensor_info_dht11)
+            self.dht11Instancia.add(info_tem)
+            listaTemp = self.dht11Instancia.return_list()
+            self.dht11Instancia.enviarDiccionarioYAlmacenamientoJson("temperatura.json", listaTemp)
+            print(info_tem)
+
+            info_hum = self.dht11Instancia.diccionario_humedad(sensor_info_dht11)
+            self.dht11Instancia.add(info_hum)
+            listaDHum = self.dht11Instancia.return_list()
+            self.dht11Instancia.enviarDiccionarioYAlmacenamientoJson("humedad.json", listaDHum)
+            print(info_hum)
 
             #Seccion LED
             info_led = self.ledInstancia.diccionario(info_led)
