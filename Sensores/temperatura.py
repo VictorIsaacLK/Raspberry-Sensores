@@ -29,7 +29,7 @@ class Temperatura(lista.Lista):
     def diccionario_temperatura(self, sensor):
         temperatura = self.leer_temperatura()
         diccionario = {
-            "valor":temperatura,
+            "valor":"{} %".format(temperatura),
             "fecha":datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
             "sensor":sensor
         }
@@ -38,7 +38,7 @@ class Temperatura(lista.Lista):
     def diccionario_humedad(self, sensor):
         humedad = self.leer_humedad()
         diccionario = {
-            "valor":humedad,
+            "valor":"{} %".format(humedad),
             "fecha":datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
             "sensor":sensor
         }

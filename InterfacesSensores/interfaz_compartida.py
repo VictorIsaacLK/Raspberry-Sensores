@@ -54,7 +54,7 @@ class InterfazCompartida():
         info_led = led
         opcion = 0
         print("Para terminar esta funcion, precione 9")
-        self.detente(2)
+        self.detente(5)
         while opcion!= 9:
 
             self.detente(2)
@@ -96,13 +96,14 @@ class InterfazCompartida():
         
         #Aqui van a estar todos juntos
         datosUltra = self.ultrasonicoInstancia.cargar_lista_json("ultrasonico.json")
-        datosDht11 = self.dht11Instancia.cargar_lista_json("dht11.json")
+        datosTemp = self.dht11Instancia.cargar_lista_json("temperatura.json")
+        datosHum = self.dht11Instancia.cargar_lista_json("humedad.json")
         datosLed = self.ledInstancia.cargar_lista_json("led.json")
-        if datosUltra == datosDht11 == datosLed == False:
+        if datosUltra == datosTemp == datosHum == datosLed == False:
             print("No existen datos actualmente")
             return False
         else:
-            self.mostrar_info_temperatura(datosDht11)
+            self.mostrar_info_temperatura(datosTemp)
             print("-----------\n\n\----------")
             self.mostrar_info_ultrasonico(datosUltra)
             print("-----------\n\n----------")
@@ -287,7 +288,7 @@ class InterfazCompartida():
                 print('| {0:^{1}} | {2:^{3}} | {4:^{5}} | {6:^{7}} | {8:^{9}} | {10:^{11}} | {12:^{13}} | {14:^{15}} | {16:^{17}} |'.format(str(cliente['clave']), clave_max_len, cliente['tipo'], tipo_max_len, cliente['descripcion'], descripcion_max_len, str(cliente['pin']), pin_max_len, str(cliente['valor_humedad']), humedad_max_len, cliente['humedad_dato'], humedad_dato_max_len, str(cliente['valor_temperatura']), temperatura_max_len, cliente['temperatura_dato'], temperatura_dato_max_len, cliente['fecha'], fecha_max_len))
                 print('-' * (clave_max_len + tipo_max_len + descripcion_max_len + pin_max_len + humedad_max_len + humedad_dato_max_len + temperatura_max_len + temperatura_dato_max_len + fecha_max_len + 18))
         except:
-            print("No hay clientes registrados")
+            print("No hay informacion registrada")
 
     def mostrar_info_ultrasonico(self, diccionario):
         try:
