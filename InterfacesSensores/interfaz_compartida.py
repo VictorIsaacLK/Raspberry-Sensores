@@ -48,9 +48,13 @@ class InterfazCompartida():
         return sensor_info_ultra, sensor_info_dht11, info_led
 
 
-    def leer_y_guardar_datos(self):
-        sensor_info_ultra, sensor_info_dht11, info_led = self.crear_sensores()
+    def leer_y_guardar_datos(self, ultra, dht11, led):
+        sensor_info_ultra = ultra
+        sensor_info_dht11 = dht11
+        info_led = led
         opcion = 0
+        print("Para terminar esta funcion, precione 9")
+        self.detente(2)
         while opcion!= 9:
 
             self.detente(2)
@@ -143,9 +147,8 @@ class InterfazCompartida():
                 print("Opcion no valida")
             print("---------------------------------------------------------------")
             if opcion == 1:
-                print("Para terminar esta funcion, precione 9")
-                self.detente(2)
-                self.leer_y_guardar_datos()
+                sensor_info_ultra, sensor_info_dht11, info_led = self.crear_sensores()
+                self.leer_y_guardar_datos(sensor_info_ultra, sensor_info_dht11, info_led)
                 opcion = 0
             elif opcion == 2:
                 self.leer_datos_guardados()
