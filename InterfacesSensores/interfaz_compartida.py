@@ -107,13 +107,13 @@ class InterfazCompartida():
             print("No existen datos actualmente")
             return False
         else:
-            self.mostrar_info_temperatura(datosTemp)
+            self.mostrar_info(datosTemp)
             print("-----------\n\n\----------")
-            self.mostrar_info_humedad(datosHum)
+            self.mostrar_info(datosHum)
             print("-----------\n\n\----------")
-            self.mostrar_info_ultrasonico(datosUltra)
+            self.mostrar_info(datosUltra)
             print("-----------\n\n----------")
-            self.mostrar_info_led(datosLed)
+            self.mostrar_info(datosLed)
 
 
     def returnar_diccionario_ultrasonico(self):
@@ -300,6 +300,28 @@ class InterfazCompartida():
             else:
                 print("Se han guardado los datos de manera adecuada en ambos sistemas")
                 self.mongoInstancia.mongoInstancia.borrar_json("temporal_led.json")
+
+    
+    def mostrar_info(self, objetos):
+        try:
+            clave_max_len = max([len(obj['sensor']['clave']) for obj in objetos])
+            tipo_max_len = max([len(obj['sensor']['tipo']) for obj in objetos])
+            descripcion_max_len = max([len(obj['sensor']['descripcion']) for obj in objetos])
+            pin_max_len = max([len(str(p)) for obj in objetos for p in obj['sensor']['pines']])
+            valor_max_len = max([len(str(obj['valor'])) for obj in objetos])
+            medida_max_len = max([len(obj['medida']) for obj in objetos])
+            fecha_max_len = max([len(obj['fecha']) for obj in objetos])
+
+            print('-' * (clave_max_len + tipo_max_len + descripcion_max_len + pin_max_len + valor_max_len + medida_max_len + fecha_max_len + 16))
+            print(colored('| {0:^{1}} | {2:^{3}} | {4:^{5}} | {6:^{7}} | {8:^{9}} | {10:^{11}} | {12:^{13}} |'.format('Clave', clave_max_len, 'Tipo', tipo_max_len, 'Descripción', descripcion_max_len, 'Pines', pin_max_len, 'Valor', valor_max_len, 'Medida', medida_max_len, 'Fecha', fecha_max_len), "yellow"))
+            print('-' * (clave_max_len + tipo_max_len + descripcion_max_len + pin_max_len + valor_max_len + medida_max_len + fecha_max_len + 16))
+
+            for obj in objetos:
+                pines = ", ".join(str(p) for p in obj['sensor']['pines'])
+                print('| {0:^{1}} | {2:^{3}} | {4:^{5}} | {6:^{7}} | {8:^{9}} | {10:^{11}} | {12:^{13}} |'.format(obj['sensor']['clave'], clave_max_len, obj['sensor']['tipo'], tipo_max_len, obj['sensor']['descripcion'], descripcion_max_len, pines, pin_max_len, obj['valor'], valor_max_len, obj['medida'], medida_max_len, obj['fecha'], fecha_max_len))
+                print('-' * (clave_max_len + tipo_max_len + descripcion_max_len + pin_max_len + valor_max_len + medida_max_len + fecha_max_len + 16))
+        except:
+            print("No hay objetos registrados")
 
     
     def mostrar_info_temperatura(self, diccionario):
