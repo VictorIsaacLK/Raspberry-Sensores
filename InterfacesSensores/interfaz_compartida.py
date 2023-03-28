@@ -7,63 +7,70 @@ import select
 from Sensores import temperatura
 from Sensores import led
 from termcolor import colored
+from Sensores import sensor
 
 class InterfazCompartida():
-    def __init__(self, mongoInstancia = interfaz_mongo.InterafazMongoDB()):
+    def __init__(self, mongoInstancia = interfaz_mongo.InterafazMongoDB(), sensorIntancia = sensor.Sensor()):
         self.mongoInstancia = mongoInstancia
+        self.sensorIntancia = sensorIntancia
         self.identificador = identifier.Identificador()
         #cargar los documentos guardados
-
 
     def detente(self, segundos):
         time.sleep(segundos)
     
     def crear_sensores(self):
-        print("A continuacion, agregaras como estan acomodados los pines de los sensores")
         
+        clave = self.identificador.crear_identificador()
+
         #Seccion sensor ultrasonico
         print("Seccion sensor ultrasonico")
         trigger_pin = int(input("Ingresa donde esta conectado el trigger pin: "))
         echo_pin = int(input("Ingresa donde esta conectado el echo pin: "))
         self.ultrasonicoInstancia = ultrasonico.Ultrasonico(trigger_pin, echo_pin)
+        sensor_info_ultra = self.sensorIntancia.diccionario_sensor(clave, "Ultrasonico HC-SR04", "Mide la distancia", [trigger_pin, echo_pin])
         self.ultrasonicoInstancia.cargar_lista_guardada_previamente()
 
         #Seccion sensor dht11
         print("Seccion sensor dht11")
         pin_dht11 = int(input("Ingresa donde esta conectado el pin: "))
         self.dht11Instancia = temperatura.Temperatura(pin_dht11)
+        sensor_info_dht11 = self.sensorIntancia.diccionario_sensor(clave, "Sensor dht11", "Mide la temperatura y distancia", [pin_dht11])
         self.dht11Instancia.cargar_lista_guardada_previamente()
 
         #Secccion LED
         print("Seccion LED")
         pin_led = int(input("Ingresa donde esta conectado el pin: "))
         self.ledInstancia = led.MyLed(pin_led)
+        info_led = self.sensorIntancia.diccionario_sensor(clave, "LED", "Diodo Emisor de Luz", [pin_led])
         self.ledInstancia.cargar_lista_guardada_previamente()
+
+        return sensor_info_ultra, sensor_info_dht11, info_led
 
 
     def leer_y_guardar_datos(self):
+        sensor_info_ultra, sensor_info_dht11, info_led = self.crear_sensores()
         opcion = 0
-        clave = self.identificador.crear_identificador()
         while opcion!= 9:
 
             self.detente(2)
             #Seccion sensor ultrasonico
 
-            info = self.ultrasonicoInstancia.diccionario(clave)
+            info = self.ultrasonicoInstancia.diccionario(sensor_info_ultra)
             self.ultrasonicoInstancia.add(info)
             listaUltrasonica = self.ultrasonicoInstancia.return_list()
             self.ultrasonicoInstancia.enviarDiccionarioYAlmacenamientoJson("ultrasonico.json", listaUltrasonica)
             print(info)
 
             #Seccion sensor dht11
-            info_dht11 = self.dht11Instancia.diccionario(clave)
+            info_dht11 = self.dht11Instancia.diccionario(sensor_info_dht11)
             self.dht11Instancia.add(info_dht11)
             listaDht11 = self.dht11Instancia.return_list()
             self.dht11Instancia.enviarDiccionarioYAlmacenamientoJson("dht11.json", listaDht11)
             print(info_dht11)
 
             #Seccion LED
-            info_led = self.ledInstancia.diccionario(clave)
+            info_led = self.ledInstancia.diccionario(info_led)
             self.ledInstancia.add(info_led)
             listaLed = self.ledInstancia.return_list()
             self.ledInstancia.enviarDiccionarioYAlmacenamientoJson("led.json", listaLed)
@@ -86,21 +93,11 @@ class InterfazCompartida():
             return False
         else:
             self.mostrar_info_temperatura(datosDht11)
-            print("-----------\n\n\n\n\n----------")
+            print("-----------\n\n\----------")
             self.mostrar_info_ultrasonico(datosUltra)
-            print("-----------\n\n\n\n\n----------")
+            print("-----------\n\n----------")
             self.mostrar_info_led(datosLed)
 
-            
-    
-
-    #creo que tampoco ha sido usado
-    def limpiar_pin(self):
-        try:
-            self.ultrasonicoInstancia.limpiar_pin()
-        except:
-            print("No existe actualmente")
-            return False
 
     def returnar_diccionario_ultrasonico(self):
         #informacion =  self.ultrasonicoInstancia.leer_json("ultrasonico.json")
@@ -127,23 +124,6 @@ class InterfazCompartida():
             return False
         else:
             return informacion
-    
-
-    def menu_introductorio(self):
-        opcion = 0
-        while opcion!= 9:
-            print("---------------------------------------------------------------")
-            print("[1] Ingresar Sensores\n[9] Salida")
-            print("---------------------------------------------------------------")
-            try:
-                opcion = int(input("Opcion: "))
-            except ValueError:
-                print("Opcion no valida")
-            print("---------------------------------------------------------------")
-            if opcion == 1:
-                self.crear_sensores()
-                opcion = 0
-                self.menu_lectura()
 
     def menu_lectura(self):
         opcion = 0
@@ -170,38 +150,6 @@ class InterfazCompartida():
         #Al salir, se limpiaran los pines para que podamos usarlos despues
         self.ultrasonicoInstancia.limpiar_pin()
 
-    #creo que no ha sido usado
-    def menu_interfaz_sensores(self):
-        opcion = 0
-        while opcion != 0:
-            print("---------------------------------------------------------------")
-            print("[1] Ultrasonico\n[2] Humedad y Temperatura\n[3] LED\n[9] Salida")
-            print("---------------------------------------------------------------")
-
-    #tampoco ha sido usado
-    def menu_ultrasonico(self):
-        opcion = 0
-        while opcion!= 9:
-            print("---------------------------------------------------------------")
-            print("\n[1] Ver Datos\n[2]Limpiar pin\n[6] Mongo\n[9] Salida")
-            print("---------------------------------------------------------------")
-            try:
-                opcion = int(input("Opcion: "))
-            except ValueError:
-                print("Opcion no valida")
-            print("---------------------------------------------------------------")
-            if opcion == 1:
-                self.leer_datos_guardados() #metodo que puede tiene que inicializarse
-                opcion = 0
-            elif opcion == 3:
-                self.limpiar_pin()
-                opcion = 0
-            elif opcion == 6:
-                self.mongoInstanciaTemporal()
-                opcion = 0
-            elif opcion == 9:
-                self.mongoInstanciaTemporal()
-                opcion = 0
     
     def mongoInstanciaTemporal(self):
         opcion = 0
