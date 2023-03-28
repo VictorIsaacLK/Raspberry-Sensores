@@ -8,6 +8,7 @@ from Sensores import temperatura
 from Sensores import led
 from termcolor import colored
 from Sensores import sensor
+from Sensores import humedad
 
 class InterfazCompartida():
     def __init__(self, mongoInstancia = interfaz_mongo.InterafazMongoDB(), sensorIntancia = sensor.Sensor()):
@@ -34,9 +35,12 @@ class InterfazCompartida():
         #Seccion sensor dht11
         print("Seccion sensor dht11")
         pin_dht11 = int(input("Ingresa donde esta conectado el pin: "))
-        self.dht11Instancia = temperatura.Temperatura(pin_dht11)
+        self.temperaturaInstancia = temperatura.Temperatura(pin_dht11)
         sensor_info_dht11 = self.sensorIntancia.diccionario_sensor(clave, "Sensor dht11", "Mide la temperatura y distancia", [pin_dht11])
-        self.dht11Instancia.cargar_lista_guardada_previamente(["humedad.json", "temperatura.json"])
+        self.temperaturaInstancia.cargar_lista_guardada_previamente()
+
+        self.humedadInstancia = humedad.Humedad(pin_dht11)
+        self.humedadInstancia.cargar_lista_guardada_previamente()
 
         #Secccion LED
         print("Seccion LED")
@@ -67,16 +71,16 @@ class InterfazCompartida():
             print(info)
 
             #Seccion sensor dht11
-            info_tem = self.dht11Instancia.diccionario_temperatura(sensor_info_dht11)
-            self.dht11Instancia.add(info_tem)
-            listaTemp = self.dht11Instancia.return_list()
-            self.dht11Instancia.enviarDiccionarioYAlmacenamientoJson("temperatura.json", listaTemp)
+            info_tem = self.temperaturaInstancia.diccionario_temperatura(sensor_info_dht11)
+            self.temperaturaInstancia.add(info_tem)
+            listaTemp = self.temperaturaInstancia.return_list()
+            self.temperaturaInstancia.enviarDiccionarioYAlmacenamientoJson("temperatura.json", listaTemp)
             print(info_tem)
 
-            info_hum = self.dht11Instancia.diccionario_humedad(sensor_info_dht11)
-            self.dht11Instancia.add(info_hum)
-            listaDHum = self.dht11Instancia.return_list()
-            self.dht11Instancia.enviarDiccionarioYAlmacenamientoJson("humedad.json", listaDHum)
+            info_hum = self.humedadInstancia.diccionario_humedad(sensor_info_dht11)
+            self.humedadInstancia.add(info_hum)
+            listaDHum = self.humedadInstancia.return_list()
+            self.humedadInstancia.enviarDiccionarioYAlmacenamientoJson("humedad.json", listaDHum)
             print(info_hum)
 
             #Seccion LED
@@ -96,14 +100,16 @@ class InterfazCompartida():
         
         #Aqui van a estar todos juntos
         datosUltra = self.ultrasonicoInstancia.cargar_lista_json("ultrasonico.json")
-        datosTemp = self.dht11Instancia.cargar_lista_json("temperatura.json")
-        datosHum = self.dht11Instancia.cargar_lista_json("humedad.json")
+        datosTemp = self.temperaturaInstancia.cargar_lista_json("temperatura.json")
+        datosHum = self.humedadInstancia.cargar_lista_json("humedad.json")
         datosLed = self.ledInstancia.cargar_lista_json("led.json")
         if datosUltra == datosTemp == datosHum == datosLed == False:
             print("No existen datos actualmente")
             return False
         else:
             self.mostrar_info_temperatura(datosTemp)
+            print("-----------\n\n\----------")
+            self.mostrar_info_humedad(datosHum)
             print("-----------\n\n\----------")
             self.mostrar_info_ultrasonico(datosUltra)
             print("-----------\n\n----------")
@@ -120,8 +126,16 @@ class InterfazCompartida():
             return informacion
         
     
-    def returnar_diccionario_dht11(self):
-        informacion = self.dht11Instancia.return_list()
+    def returnar_diccionario_temperatura(self):
+        informacion = self.temperaturaInstancia.return_list()
+        if informacion == False:
+            print("No existen datos actualmente")
+            return False
+        else:
+            return informacion
+    
+    def returnar_diccionario_humedad(self):
+        informacion = self.humedadInstancia.return_list()
         if informacion == False:
             print("No existen datos actualmente")
             return False
@@ -176,7 +190,8 @@ class InterfazCompartida():
             elif opcion == 2:
                 #Aqui empieza lo bueno
                 self.ultrasonico_mongo()
-                self.dht11_mongo()
+                self.humedad_mongo()
+                self.temperatura_mongo()
                 self.led_mongo()
                 opcion = 0
             elif opcion == 3:
@@ -186,7 +201,7 @@ class InterfazCompartida():
         jsontemporal = self.mongoInstancia.mongoInstancia.cargar_lista_json("temporal_ultrasonico.json")
         if jsontemporal == False:
             print("No existe ningun archivo temporal actualmente")
-            se_guardo = self.mongoInstancia.mongoInstancia.guardar_en_mongo('Sensores', 'DatoSensorUltrasonico', self.returnar_diccionario_ultrasonico(), 'ultrasonico.json', 'temporal_ultrasonico.json') #se llama gaurdar en mongo en la nueva
+            se_guardo = self.mongoInstancia.mongoInstancia.guardar_en_mongo('Sensores', 'DatoSensor', self.returnar_diccionario_ultrasonico(), 'ultrasonico.json', 'temporal_ultrasonico.json') #se llama gaurdar en mongo en la nueva
             if se_guardo == False:
                 print("No existe conexion con la base de datos, se han guardado los datos de manera temporal")
                 # De aqui en adelante si exite la conexion, al menos en este if, es cuando no existe ar temporal, pero si conexion            
@@ -196,7 +211,7 @@ class InterfazCompartida():
             nuevojsonjeje = self.ultrasonicoInstancia.cargar_lista_json_temporal(jsontemporal)
             # print(jsonTemporalConvertido)
             # el jsontemporal tiene que pasar por el convertidor, porque si no me esta jodiendo la json
-            se_guardo = self.mongoInstancia.mongoInstancia.guardar_en_mongo('Sensores', 'DatoSensorUltrasonico', nuevojsonjeje, 'ultrasonico.json', 'temporal_ultrasonico.json')
+            se_guardo = self.mongoInstancia.mongoInstancia.guardar_en_mongo('Sensores', 'DatoSensor', nuevojsonjeje, 'ultrasonico.json', 'temporal_ultrasonico.json')
             if se_guardo == False:
                 print("Pu;etas")
             else:
@@ -225,25 +240,45 @@ class InterfazCompartida():
         #             self.mongoInstancia.borrar_json("temporal_ultrasonico.json")
 
 
-    def dht11_mongo(self):
-        jsontemporal = self.mongoInstancia.mongoInstancia.cargar_lista_json("temporal_dht11.json")
+    def temperatura_mongo(self):
+        jsontemporal = self.mongoInstancia.mongoInstancia.cargar_lista_json("temporal_temperatura.json")
         if jsontemporal == False:
             print("No existe ningun archivo temporal actualmente")
-            se_guardo = self.mongoInstancia.mongoInstancia.guardar_en_mongo('Sensores', 'DatoSensorDHT11', self.returnar_diccionario_dht11(), 'dht11.json', 'temporal_dht11.json')
+            se_guardo = self.mongoInstancia.mongoInstancia.guardar_en_mongo('Sensores', 'DatoSensor', self.returnar_diccionario_temperatura(), 'temperatura.json', 'temporal_temperatura.json')
             if se_guardo == False:
                 print("No existe conexion con la base de datos, se han guardado los datos de manera temporal")   
             else:
                 print("Se han guardado los datos de manera adecuada en ambos sistemas")
         else:
-            nuevojsonjeje = self.dht11Instancia.cargar_lista_json_temporal(jsontemporal)
+            nuevojsonjeje = self.temperaturaInstancia.cargar_lista_json_temporal(jsontemporal)
             # print(jsonTemporalConvertido)
             # el jsontemporal tiene que pasar por el convertidor, porque si no me esta jodiendo la json
-            se_guardo = self.mongoInstancia.mongoInstancia.guardar_en_mongo('Sensores', 'DatoSensorDHT11', nuevojsonjeje, 'dht11.json', 'temporal_dht11.json')
+            se_guardo = self.mongoInstancia.mongoInstancia.guardar_en_mongo('Sensores', 'DatoSensor', nuevojsonjeje, 'temperatura.json', 'temporal_temperatura.json')
             if se_guardo == False:
                 print("Pu;etas")
             else:
                 print("Se han guardado los datos de manera adecuada en ambos sistemas")
-                self.mongoInstancia.mongoInstancia.borrar_json("temporal_dht11.json")
+                self.mongoInstancia.mongoInstancia.borrar_json("temporal_temperatura.json")
+    
+    def humedad_mongo(self):
+        jsontemporal = self.mongoInstancia.mongoInstancia.cargar_lista_json("temporal_humedad.json")
+        if jsontemporal == False:
+            print("No existe ningun archivo temporal actualmente")
+            se_guardo = self.mongoInstancia.mongoInstancia.guardar_en_mongo('Sensores', 'DatoSensor', self.returnar_diccionario_humedad(), 'humedad.json', 'temporal_humedad.json')
+            if se_guardo == False:
+                print("No existe conexion con la base de datos, se han guardado los datos de manera temporal")   
+            else:
+                print("Se han guardado los datos de manera adecuada en ambos sistemas")
+        else:
+            nuevojsonjeje = self.temperaturaInstancia.cargar_lista_json_temporal(jsontemporal)
+            # print(jsonTemporalConvertido)
+            # el jsontemporal tiene que pasar por el convertidor, porque si no me esta jodiendo la json
+            se_guardo = self.mongoInstancia.mongoInstancia.guardar_en_mongo('Sensores', 'DatoSensor', nuevojsonjeje, 'humedad.json', 'temporal_humedad.json')
+            if se_guardo == False:
+                print("Pu;etas")
+            else:
+                print("Se han guardado los datos de manera adecuada en ambos sistemas")
+                self.mongoInstancia.mongoInstancia.borrar_json("temporal_humedad.json")
     
     
     def led_mongo(self):

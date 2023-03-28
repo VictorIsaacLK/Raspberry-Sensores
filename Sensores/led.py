@@ -22,6 +22,7 @@ class MyLed(lista.Lista):
         diccionario = {
             "valor":estado,
             "fecha":datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+            "medida":"bool",
             "sensor":sensor
         }
         return diccionario
@@ -35,6 +36,7 @@ class MyLed(lista.Lista):
                 diccionario  = {
                     "valor" : objetoIndividual["valor"],
                     "fecha" : objetoIndividual["fecha"],
+                    "medida": objetoIndividual["medida"],
                     "sensor" : objetoIndividual["sensor"]
                 }
                 self.add(diccionario)
@@ -45,10 +47,12 @@ class MyLed(lista.Lista):
             for i in lista:
                 valor = i["valor"]
                 fecha = i["fecha"]
+                medida = i["medida"]
                 sensor = i["sensor"]
                 listanueva.append({
                     "valor":valor,
                     "fecha":fecha,
+                    "medida":medida,
                     "sensor":sensor
                     })
             super().enviarDiccionarioYAlmacenamientoJson("led.json", listanueva)

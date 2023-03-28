@@ -2,41 +2,43 @@ import Adafruit_DHT
 from Lista import lista
 import datetime
 
-class Temperatura(lista.Lista):
+class Humedad(lista.Lista):
     def __init__(self, pin):
         self.pin = pin
         self.sensor = Adafruit_DHT.DHT11
         super().__init__()
 
     #Lectura
-    def leer_temperatura(self):
+    
+    def leer_humedad(self):
         humedad, temperatura = Adafruit_DHT.read_retry(self.sensor, self.pin)
         if humedad is not None and temperatura is not None:
-            return temperatura
+            return humedad
         else:
             print("Error al leer los datos")
 
 
     #Diccionario
 
-    def diccionario_temperatura(self, sensor):
-        temperatura = self.leer_temperatura()
+    def diccionario_humedad(self, sensor):
+        humedad = self.leer_humedad()
         diccionario = {
-            "valor":temperatura,
+            "valor":humedad,
             "fecha":datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
-            "medida":"°C",
+            "medida":"%",
             "sensor":sensor
         }
         return diccionario
+    
 
 
     #Cargar listas
 
     def cargar_lista_guardada_previamente(self):
-        if super().cargar_lista_json("temperatura.json") == False:
+        if super().cargar_lista_json("humedad.json") == False:
             return False
         else:
-            nuevaLista = super().cargar_lista_json("temperatura.json")
+            nuevaLista = super().cargar_lista_json("humedad.json")
             for objetoIndividual in nuevaLista:
                 diccionario  = {
                     "valor" : objetoIndividual["valor"],
@@ -60,7 +62,7 @@ class Temperatura(lista.Lista):
                     "medida":medida,
                     "sensor":sensor
                     })
-            super().enviarDiccionarioYAlmacenamientoJson("temperatura.json", listanueva)
+            super().enviarDiccionarioYAlmacenamientoJson("humedad.json", listanueva)
             return listanueva
         except:
             return False

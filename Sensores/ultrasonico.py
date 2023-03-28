@@ -38,7 +38,7 @@ class Ultrasonico(lista.Lista):
 
         # Tiempo de diferencia entre la ida y llegada
         TimeElapsed = StopTime - StartTime
-        
+
         # multiply with the sonic speed (34300 cm/s)
         # and divide by 2, because there and back
         distance = (TimeElapsed * 34300) / 2
@@ -49,6 +49,7 @@ class Ultrasonico(lista.Lista):
         diccionario = {
             "valor":distancia,
             "fecha":datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+            "medida":"cm",
             "sensor":sensor
         }
         return diccionario
@@ -62,6 +63,7 @@ class Ultrasonico(lista.Lista):
                 diccionario  = {
                     "valor" : objetoIndividual["valor"],
                     "fecha" : objetoIndividual["fecha"],
+                    "medida": objetoIndividual["medida"],
                     "sensor": objetoIndividual["sensor"],
                 }
                 self.add(diccionario)
@@ -72,10 +74,12 @@ class Ultrasonico(lista.Lista):
             for i in lista:
                 valor = i["valor"]
                 fecha = i["fecha"]
+                medida = i["medida"]
                 sensor = i["sensor"]
                 listanueva.append({
                     "valor":valor,
                     "fecha":fecha,
+                    "medida":medida,
                     "sensor":sensor
                     })
             super().enviarDiccionarioYAlmacenamientoJson("ultrasonico.json", listanueva)
