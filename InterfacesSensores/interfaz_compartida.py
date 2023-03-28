@@ -36,7 +36,7 @@ class InterfazCompartida():
         pin_dht11 = int(input("Ingresa donde esta conectado el pin: "))
         self.dht11Instancia = temperatura.Temperatura(pin_dht11)
         sensor_info_dht11 = self.sensorIntancia.diccionario_sensor(clave, "Sensor dht11", "Mide la temperatura y distancia", [pin_dht11])
-        self.dht11Instancia.cargar_lista_guardada_previamente()
+        self.dht11Instancia.cargar_lista_guardada_previamente("humedad.json", "temperatura.json")
 
         #Secccion LED
         print("Seccion LED")
