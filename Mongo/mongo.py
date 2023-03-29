@@ -20,7 +20,7 @@ class MongoDB(lista.Lista):
             super().enviarDiccionarioYAlmacenamientoJson(nombre_json, lista)
             db = self.client[db_name]
             collection = db[coll_name]
-            collection.delete_many({})
+            # collection.delete_many({})
             collection.insert_many(lista)
         except Exception:
             super().enviarDiccionarioYAlmacenamientoJson(nombre_temp_json, lista)

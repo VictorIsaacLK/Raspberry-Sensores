@@ -285,7 +285,7 @@ class InterfazCompartida():
         jsontemporal = self.mongoInstancia.mongoInstancia.cargar_lista_json("temporal_led.json")
         if jsontemporal == False:
             print("No existe ningun archivo temporal actualmente")
-            se_guardo = self.mongoInstancia.mongoInstancia.guardar_en_mongo('Sensores', 'DatoSensorLED', self.returnar_diccionario_led(), 'led.json', 'temporal_led.json')
+            se_guardo = self.mongoInstancia.mongoInstancia.guardar_en_mongo('Sensores', 'DatoSensor', self.returnar_diccionario_led(), 'led.json', 'temporal_led.json')
             if se_guardo == False:
                 print("No existe conexion con la base de datos, se han guardado los datos de manera temporal")   
             else:
@@ -294,7 +294,7 @@ class InterfazCompartida():
             nuevojsonjeje = self.ledInstancia.cargar_lista_json_temporal(jsontemporal)
             # print(jsonTemporalConvertido)
             # el jsontemporal tiene que pasar por el convertidor, porque si no me esta jodiendo la json
-            se_guardo = self.mongoInstancia.mongoInstancia.guardar_en_mongo('Sensores', 'DatoSensorLED', nuevojsonjeje, 'led.json', 'temporal_led.json')
+            se_guardo = self.mongoInstancia.mongoInstancia.guardar_en_mongo('Sensores', 'DatoSensor', nuevojsonjeje, 'led.json', 'temporal_led.json')
             if se_guardo == False:
                 print("Pu;etas")
             else:
