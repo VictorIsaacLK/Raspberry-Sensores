@@ -30,6 +30,7 @@ class InterfazCompartida():
         echo_pin = int(input("Ingresa donde esta conectado el echo pin: "))
         self.ultrasonicoInstancia = ultrasonico.Ultrasonico(trigger_pin, echo_pin)
         sensor_info_ultra = self.sensorIntancia.diccionario_sensor(clave, "Ultrasonico HC-SR04", "Mide la distancia", [trigger_pin, echo_pin])
+        self.sensorIntancia.add(sensor_info_ultra)
         self.ultrasonicoInstancia.cargar_lista_guardada_previamente()
 
         #Seccion sensor dht11
@@ -37,6 +38,7 @@ class InterfazCompartida():
         pin_dht11 = int(input("Ingresa donde esta conectado el pin: "))
         self.temperaturaInstancia = temperatura.Temperatura(pin_dht11)
         sensor_info_dht11 = self.sensorIntancia.diccionario_sensor(clave, "Sensor dht11", "Mide la temperatura y distancia", [pin_dht11])
+        self.sensorIntancia.add(sensor_info_dht11)
         self.temperaturaInstancia.cargar_lista_guardada_previamente()
 
         self.humedadInstancia = humedad.Humedad(pin_dht11)
@@ -47,6 +49,7 @@ class InterfazCompartida():
         pin_led = int(input("Ingresa donde esta conectado el pin: "))
         self.ledInstancia = led.MyLed(pin_led)
         info_led = self.sensorIntancia.diccionario_sensor(clave, "LED", "Diodo Emisor de Luz", [pin_led])
+        self.sensorIntancia.add(pin_led)
         self.ledInstancia.cargar_lista_guardada_previamente()
 
         return sensor_info_ultra, sensor_info_dht11, info_led
@@ -148,6 +151,14 @@ class InterfazCompartida():
             return False
         else:
             return informacion
+        
+    def returnar_diccionario_sensor(self):
+        informacion = self.sensorIntancia.return_list()
+        if informacion == False:
+            print("No existen datos actualmente")
+            return False
+        else:
+            return informacion
 
     def menu_lectura(self):
         opcion = 0
@@ -192,6 +203,7 @@ class InterfazCompartida():
                 self.humedad_mongo()
                 self.temperatura_mongo()
                 self.led_mongo()
+                self.sensor_mongo()
                 opcion = 0
             elif opcion == 3:
                 self.mongoInstancia.cerrarConexion()
@@ -299,6 +311,26 @@ class InterfazCompartida():
             else:
                 print("Se han guardado los datos de manera adecuada en ambos sistemas")
                 self.mongoInstancia.mongoInstancia.borrar_json("temporal_led.json")
+    
+    def sensor_mongo(self):
+        jsontemporal = self.mongoInstancia.mongoInstancia.cargar_lista_json("temporal_sensor.json")
+        if jsontemporal == False:
+            print("No existe ningun archivo temporal actualmente")
+            se_guardo = self.mongoInstancia.mongoInstancia.guardar_en_mongo('Sensores', 'Sensor', self.returnar_diccionario_sensor(), 'sensor.json', 'temporal_sensor.json')
+            if se_guardo == False:
+                print("No existe conexion con la base de datos, se han guardado los datos de manera temporal")   
+            else:
+                print("Se han guardado los datos de manera adecuada en ambos sistemas")
+        else:
+            nuevojsonjeje = self.sensorIntancia.cargar_lista_json_temporal(jsontemporal)
+            # print(jsonTemporalConvertido)
+            # el jsontemporal tiene que pasar por el convertidor, porque si no me esta jodiendo la json
+            se_guardo = self.mongoInstancia.mongoInstancia.guardar_en_mongo('Sensores', 'Sensor', nuevojsonjeje, 'sensor.json', 'temporal_sensor.json')
+            if se_guardo == False:
+                print("Pu;etas")
+            else:
+                print("Se han guardado los datos de manera adecuada en ambos sistemas")
+                self.mongoInstancia.mongoInstancia.borrar_json("temporal_sensor.json")
 
     
     def mostrar_info(self, objetos):
