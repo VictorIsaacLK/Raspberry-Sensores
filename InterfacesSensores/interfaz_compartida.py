@@ -322,24 +322,3 @@ class InterfazCompartida():
                 print('-' * (clave_max_len + tipo_max_len + descripcion_max_len + pin_max_len + valor_max_len + medida_max_len + fecha_max_len + 16))
         except:
             print("No hay objetos registrados")
-
-    
-    def mostrar_info_led(self, objetos):
-        try:
-            clave_max_len = max([len(obj['clave']) for obj in objetos])
-            tipo_max_len = max([len(obj['tipo']) for obj in objetos])
-            descripcion_max_len = max([len(obj['descripcion']) for obj in objetos])
-            pin_max_len = max([len(str(obj['pin'])) for obj in objetos])
-            valor_max_len = max([len(str(obj['valor'])) for obj in objetos])
-            tipo_dato_max_len = max([len(obj['tipo_dato']) for obj in objetos])
-            fecha_max_len = max([len(obj['fecha']) for obj in objetos])
-
-            print('-' * (clave_max_len + tipo_max_len + descripcion_max_len + pin_max_len + valor_max_len + tipo_dato_max_len + fecha_max_len + 14))
-            print(colored('| {0:^{1}} | {2:^{3}} | {4:^{5}} | {6:^{7}} | {8:^{9}} | {10:^{11}} | {12:^{13}} |'.format('Clave', clave_max_len, 'Tipo', tipo_max_len, 'Descripción', descripcion_max_len, 'Pin', pin_max_len, 'Valor', valor_max_len, 'Tipo Dato', tipo_dato_max_len, 'Fecha', fecha_max_len), "yellow"))
-            print('-' * (clave_max_len + tipo_max_len + descripcion_max_len + pin_max_len + valor_max_len + tipo_dato_max_len + fecha_max_len + 14))
-
-            for obj in objetos:
-                print('| {0:^{1}} | {2:^{3}} | {4:^{5}} | {6:^{7}} | {8:^{9}} | {10:^{11}} | {12:^{13}} |'.format(obj['clave'], clave_max_len, obj['tipo'], tipo_max_len, obj['descripcion'], descripcion_max_len, obj['pin'], pin_max_len, obj['valor'], valor_max_len, obj['tipo_dato'], tipo_dato_max_len, obj['fecha'], fecha_max_len))
-                print('-' * (clave_max_len + tipo_max_len + descripcion_max_len + pin_max_len + valor_max_len + tipo_dato_max_len + fecha_max_len + 14))
-        except:
-            print("No hay objetos registrados")
