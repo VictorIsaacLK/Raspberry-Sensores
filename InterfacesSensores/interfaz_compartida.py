@@ -52,6 +52,10 @@ class InterfazCompartida():
         self.sensorIntancia.add(pin_led)
         self.ledInstancia.cargar_lista_guardada_previamente()
 
+        
+        listaSensor = self.ultrasonicoInstancia.return_list()
+        self.sensorIntancia.enviarDiccionarioYAlmacenamientoJson("sensor.json", listaSensor)
+
         return sensor_info_ultra, sensor_info_dht11, info_led
 
 
