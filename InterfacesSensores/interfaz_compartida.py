@@ -49,7 +49,7 @@ class InterfazCompartida():
         pin_led = int(input("Ingresa donde esta conectado el pin: "))
         self.ledInstancia = led.MyLed(pin_led)
         info_led = self.sensorIntancia.diccionario_sensor(clave, "LED", "Diodo Emisor de Luz", [pin_led])
-        self.sensorIntancia.add(pin_led)
+        self.sensorIntancia.add(info_led)
         self.ledInstancia.cargar_lista_guardada_previamente()
 
         
