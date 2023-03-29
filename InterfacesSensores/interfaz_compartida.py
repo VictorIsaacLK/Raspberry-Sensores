@@ -55,7 +55,7 @@ class InterfazCompartida():
     def leer_y_guardar_datos(self, ultra, dht11, led):
         sensor_info_ultra = ultra
         sensor_info_dht11 = dht11
-        info_led = led
+        sensor_info_led = led
         opcion = 0
         print("Para terminar esta funcion, precione 9")
         self.detente(5)
@@ -83,8 +83,7 @@ class InterfazCompartida():
             self.humedadInstancia.enviarDiccionarioYAlmacenamientoJson("humedad.json", listaDHum)
             print(info_hum)
 
-            #Seccion LED
-            info_led = self.ledInstancia.diccionario(info_led)
+            info_led = self.ledInstancia.diccionario(sensor_info_led)
             self.ledInstancia.add(info_led)
             listaLed = self.ledInstancia.return_list()
             self.ledInstancia.enviarDiccionarioYAlmacenamientoJson("led.json", listaLed)
